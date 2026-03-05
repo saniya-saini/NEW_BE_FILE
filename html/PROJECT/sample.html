@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrackBus Dashboard</title>
+  <link rel="stylesheet" href="../../css/PROJECT/sample.css">
+</head>
+
+<body>
+  <div class="sidebar">
+    <div class="logo-section">
+      <div class="logo">
+        <div class="logo-icon"></div>
+        <span>TrackBus</span>
+      </div>
+    </div>
+
+    <div class="nav-menu">
+      <div class="nav-item active">
+        <span>Dashboard</span>
+      </div>
+      <div class="nav-item">
+        <span>Schedule</span>
+      </div>
+      <div class="nav-item">
+        <span>Report</span>
+      </div>
+      <div class="nav-item">
+        <span>Review</span>
+      </div>
+      <div class="nav-item">
+        <span>Book A Ticket</span>
+      </div>
+    </div>
+
+    <div class="sign-out">
+      <span>↪ Sign out</span>
+    </div>
+  </div>
+
+  <div class="main-content" id="mainContent">
+    <div class="header">
+      <h1 class="page-title">Dashboard</h1>
+      <div class="header-actions">
+        <div class="search-icon">🔍</div>
+        <button class="toggle-sidebar" onclick="toggleSidebar()">👤</button>
+      </div>
+    </div>
+
+    <div class="welcome-banner">
+      <div class="welcome-content">
+        <div class="welcome-text">
+          <h1>Welcome back, Prisha!</h1>
+          <p>Here's your bus tracking and safety overview for today</p>
+        </div>
+        <div class="welcome-stats">
+          <div class="welcome-stat">
+            <div class="welcome-stat-number">156</div>
+            <div class="welcome-stat-label">Active Buses</div>
+          </div>
+          <div class="welcome-stat">
+            <div class="welcome-stat-number">2,847</div>
+            <div class="welcome-stat-label">Passengers</div>
+          </div>
+          <div class="welcome-stat">
+            <div class="welcome-stat-number">94.5%</div>
+            <div class="welcome-stat-label">Safety Score</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="track-bus-section">
+        <button class="track-bus-btn" onclick="initiateBusTracking()">
+          <div class="track-icon">📍</div>
+          <div class="track-text">
+            <h3>Track Your Bus</h3>
+            <p>Click to view live bus locations and routes</p>
+          </div>
+          <div class="track-arrow">→</div>
+        </button>
+      </div>
+
+      <div class="quick-actions">
+        <h2 class="section-title">
+          <span>⚡</span>
+          Quick Actions
+        </h2>
+        <div class="action-buttons">
+          <button class="action-btn">
+            <div class="action-icon"></div>
+            <div class="action-text">
+              <h3>Track Bus</h3>
+              <p>Find your bus location</p>
+            </div>
+          </button>
+          <button class="action-btn">
+            <div class="action-icon"></div>
+            <div class="action-text">
+              <h3>Report Issue</h3>
+              <p>Report safety concerns</p>
+            </div>
+          </button>
+          <button class="action-btn">
+            <div class="action-icon"></div>
+            <div class="action-text">
+              <h3>View Schedule</h3>
+              <p>Check bus timings</p>
+            </div>
+          </button>
+          <button class="action-btn">
+            <div class="action-icon"></div>
+            <div class="action-text">
+              <h3>Analytics</h3>
+              <p>View detailed reports</p>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-section">
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon safety-icon">🛡</div>
+          <div>
+            <div class="stat-value">94.5%</div>
+            <div class="stat-label">Safety Score</div>
+            <div class="stat-change positive">+2.3% from last week</div>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon buses-icon"></div>
+          <div>
+            <div class="stat-value">156</div>
+            <div class="stat-label">Active Buses</div>
+            <div class="stat-change positive">+12 from yesterday</div>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon reports-icon"></div>
+          <div>
+            <div class="stat-value">8</div>
+            <div class="stat-label">New Reports</div>
+            <div class="stat-change negative">+3 from yesterday</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="recent-activity">
+      <h2 class="section-title">
+        <span></span>
+        Recent Activity
+      </h2>
+      <div class="activity-list">
+        <div class="activity-item">
+          <div class="activity-icon">📍</div>
+          <div class="activity-content">
+            <h4>Bus MH12AB1234 tracked</h4>
+            <p>Pune → Mumbai route is running on schedule</p>
+          </div>
+          <div class="activity-time">2 min ago</div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon">⚠</div>
+          <div class="activity-content">
+            <h4>Safety report submitted</h4>
+            <p>Rash driving incident reported for bus MH14CD5678</p>
+          </div>
+          <div class="activity-time">15 min ago</div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon"></div>
+          <div class="activity-content">
+            <h4>Schedule checked</h4>
+            <p>Bus MH16EF9012 is scheduled for 9:30 am</p>
+          </div>
+          <div class="activity-time">1 hour ago</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-sidebar" id="rightSidebar">
+    <div class="sidebar-header">
+      <h3 class="sidebar-title">User Profile</h3>
+      <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+    </div>
+
+    <div class="profile-section">
+      <div class="profile-pic">
+        👩
+        <div class="profile-status"></div>
+      </div>
+      <div class="profile-name">Prisha Anand</div>
+      <div class="profile-role">User</div>
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <div class="profile-stat-number">3</div>
+          <div class="profile-stat-label">Buses Travelled</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-number">2</div>
+          <div class="profile-stat-label">Report Initiated</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="user-details">
+      <h3 style="margin-bottom: 20px; color: #2d3748; font-size: 16px;">Contact Information</h3>
+      <div class="detail-item">
+        <div class="detail-icon">📧</div>
+        <div class="detail-content">
+          <h4>Email</h4>
+          <p>prishaanand1507@gmail.com</p>
+        </div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-icon">📱</div>
+        <div class="detail-content">
+          <h4>Phone</h4>
+          <p>+91 98765 43210</p>
+        </div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-icon">📍</div>
+        <div class="detail-content">
+          <h4>Location</h4>
+          <p>Mumbai Central Station</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-stats">
+      <h3 style="margin-bottom: 20px; color: #2d3748; font-size: 16px;">Today's Overview</h3>
+      <div class="stat-item">
+        <span class="stat-label">Reports handled:</span>
+        <span class="stat-value">2</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Resolved:</span>
+        <span class="stat-value completed">1</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">In progress:</span>
+        <span class="stat-value progress">1</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Critical alerts:</span>
+        <span class="stat-value overdue">0</span>
+      </div>
+    </div>
+  </div>
+    <script src="newdashboard.js"></script>
+  </body>
+
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bus Safety Reporting System</title>
+  <link rel="icon" type="image/x-icon" href="https://www.citypng.com/public/uploads/preview/round-blue-autobus-autocar-bus-station-icon-701751694972515da9abrwr17.png?v=2025082221">
+  <link rel="stylesheet" href="../../css/PROJECT/reporting.css">
+</head>
+<body>
+
+    <div class="sidebar">
+    <div class="logo-section">
+      <div class="logo">
+        <span>TrackBus</span>
+      </div>
+    </div>
+<div class="nav-menu">
+  <a href="newdashboard.html" class="nav-item">
+    <div class="nav-icon"></div>
+    <span>Dashboard</span>
+  </a>
+
+  <a href="busschedule.html" class="nav-item">
+    <div class="nav-icon"></div>
+    <span>Schedule</span>
+  </a>
+
+  <a href="reporting.html" class="nav-item active">
+    <div class="nav-icon"></div>
+    <span>Report</span>
+  </a>
+
+  <a href="review.html" class="nav-item">
+    <div class="nav-icon"></div>
+    <span>Review</span>
+  </a>
+
+  <a href="book-ticket.html" class="nav-item">
+        <div class="nav-icon"></div>
+        <span>Book A Ticket</span>
+      </a>
+</div>
+    <div class="sign-out">
+      <div class="nav-icon">↪</div>
+      <span>Sign out</span>
+    </div>
+  </div>
+  <div class="main-content">
+    <div class="header">
+      <h1>Safety Reporting</h1>
+      <div class="header-actions">
+        <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+          <span class="toggle-icon">🌙</span>
+        </button>
+        <button class="profile" title="Profile">👤</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="emergency">
+        <h2>🚨 EMERGENCY</h2>
+        <button class="emergency-btn">🚑 EMERGENCY ALERT</button>
+        <p>
+          Press this button immediately if there's an emergency in the bus.<br>
+          This will instantly alert management and emergency services.
+        </p>
+      </div>
+      <div id="confirmModal" class="modal">
+        <div class="modal-content confirm-modal">
+          <div class="modal-icon">⚠</div>
+          <h2>Confirm Emergency Alert</h2>
+          <p>Are you sure you want to send an emergency alert?<br>This will notify management and emergency services immediately.</p>
+          <div class="modal-buttons">
+            <button class="modal-btn cancel-btn" onclick="closeConfirmModal()">Cancel</button>
+            <button class="modal-btn confirm-btn" onclick="sendEmergencyAlert()">Yes, Send Alert</button>
+          </div>
+        </div>
+      </div>
+       <div id="successModal" class="modal">
+        <div class="modal-content success-modal">
+          <span class="close-modal" onclick="closeSuccessModal()">&times;</span>
+          <div class="modal-icon">🚨</div>
+          <h2>Emergency Alert Sent!</h2>
+          <p>Help is on the way. Emergency services and management have been notified.</p>
+          <button class="modal-btn" onclick="closeSuccessModal()">OK</button>
+        </div>
+      </div>
+
+      <h1>Report Safety Concerns</h1>
+      <p>Help us improve public transportation safety by reporting any issues you encounter during your journey.</p>
+
+      <h1>What would you Like to Report?</h1> 
+      
+      <div class="report-options">
+        <div class="report-option">
+            <img src="https://thumb.ac-illust.com/80/8070ef18b17da4b1454b69788e954ad3_t.jpeg" alt="Rash Driving">
+            <h3>Rash Driving</h3>
+        </div>
+        
+        <div class="report-option">
+          <img src="https://cdn-icons-png.flaticon.com/512/4786/4786868.png" alt="Bus Condition">
+          <h3>Bus Condition</h3>
+        </div>
+        
+        <div class="report-option">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQMvJl9HR9rV9Crqmr0duHuHFwA5y4JYZWVA&s" alt="Driver Behavior">
+          <h3>Driver Behavior</h3>
+        </div>
+        
+        <div class="report-option">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE4RI45fe41FKU1rMoHMMT4Rms5QsN7ZMN3Q&s" alt="Other Issue">
+          <h3>Other Issue</h3>
+        </div>
+      </div>
+
+    <div class="form-section">
+        <form>
+          <label>Bus Number</label>
+          <input type="text" id="busNumber" placeholder="e.g., PB-01-B-2946" required>
+          <span class="error-message" id="busNumberError"></span>
+
+          <label>Location/Stop</label>
+          <input type="text" placeholder="Nearest bus stop or landmark" required>
+
+          <label>Date</label>
+          <input type="date" required>
+
+          <label>Time</label>
+          <input type="time" required>
+
+          <label>Description</label>
+          <textarea rows="4" placeholder="Please provide detailed description of the incident..." required></textarea>
+
+          <label>Severity Level</label>
+          <div class="radio-group">
+            <div class="radio-option">
+              <input type="radio" name="severity" id="low" required>
+              <label for="low">Low</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="severity" id="medium" required>
+              <label for="medium">Medium</label>
+            </div>
+            <div class="radio-option">
+              <input type="radio" name="severity" id="high" required>
+              <label for="high">High</label>
+            </div>
+          </div>
+          
+          <label>Upload Evidence</label>
+          <div class="file-upload-container">
+            <div class="file-upload-area" id="fileUploadArea">
+              <span class="upload-icon">📂</span>
+              <div class="upload-text">Drag & Drop files here</div>
+              <div class="upload-subtext">or click to browse files</div>
+              <input type="file" class="file-input" id="fileInput" multiple accept="image/,video/,.pdf">
+            </div>
+            <div class="uploaded-files" id="uploadedFiles"></div>
+          </div>
+
+          <label>Rate Your Overall Experience</label>
+          <div class="star-rating">
+            <input type="radio" id="star5" name="rating" value="5">
+            <label for="star5" title="Excellent">★</label>
+            <input type="radio" id="star4" name="rating" value="4">
+            <label for="star4" title="Very Good">★</label>
+            <input type="radio" id="star3" name="rating" value="3">
+            <label for="star3" title="Good">★</label>
+            <input type="radio" id="star2" name="rating" value="2">
+            <label for="star2" title="Poor">★</label>
+            <input type="radio" id="star1" name="rating" value="1">
+            <label for="star1" title="Very Poor">★</label>
+          </div>
+
+          <button type="submit" class="submit-btn">Submit Report</button>
+        </form>
+      </div>
+      <div class="reports-section">
+        <h2>📋 Submitted Reports</h2>
+        <div id="reportsContainer"></div>
+      </div>
+
+      <div class="info">
+        <div class="card">
+          <h3>Why Report?</h3>
+          <p>Your reports help us identify problematic drivers, improve bus conditions, and make public transportation safer for everyone. Every report contributes to building a better transit system.</p>
+        </div>
+        <div class="card">
+          <h3>What Happens Next?</h3>
+          <p>Reports are reviewed by our team within 24-48 hours and forwarded to transport authorities for investigation and appropriate action. You'll receive updates if you provide contact information.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="copyright">
+        <div>
+          <h4>TrackBus</h4>
+          <p>Making public transportation safer and more reliable through community reporting.</p>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <p>Email: contact@trackbus.com</p>
+          <p>Phone: +91 5465465138</p>
+        </div>
+        <div class="social">
+          <h4>Follow Us</h4>
+          <div class="social-icons">
+            <a href="#"><img src="https://img.icons8.com/color/48/000000/facebook-new.png" width="30" height="30"/></a>
+            <a href="#"><img src="https://img.icons8.com/color/48/000000/twitter.png" width="30" height="30"/></a>
+            <a href="#"><img src="https://img.icons8.com/color/48/000000/instagram-new.png" width="30" height="30"/></a>
+            <a href="#"><img src="https://img.icons8.com/color/48/000000/linkedin.png" width="30" height="30"/></a>
+          </div>
+        </div>
+      </div>
+      <div class="copyrightt">
+        © 2025 TrackBus. All rights reserved.
+      </div>
+    </footer>
+  </div>
+  <script src="../../js/PROJECT/reporting.js"></script>
+</body>
+</html>
