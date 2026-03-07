@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrackBus Dashboard</title>
+  <link rel="stylesheet" href="../../css/PROJECT/newdashboard.css">
+</head>
+
+<body>
+  <div class="sidebar">
+    <div class="logo-section">
+      <div class="logo">
+        <span>TrackBus</span>
+      </div>
+    </div>
+
+    <div class="nav-menu">
+      <a href="newdashboard.html" class="nav-item active"><span>Dashboard</span></a>
+      <a href="busschedule.html" class="nav-item"><span>Schedule</span></a>
+      <a href="reporting.html" class="nav-item"><span>Report</span></a>
+      <a href="review.html" class="nav-item"><span>Review</span></a>
+      <a href="book-ticket.html" class="nav-item"><span>Book A Ticket</span></a>
+    </div>
+
+    <div class="sign-out">
+      <span style="cursor: pointer;" onclick="handleLogout()">↪ Sign out</span>
+    </div>
+  </div>
+
+  <div class="main-content" id="mainContent">
+    <div class="header">
+      <div class="header-actions">
+        <div class="search-icon">🔍</div>
+        <button class="toggle-sidebar" onclick="toggleSidebar()">👤</button>
+      </div>
+    </div>
+
+    <div class="welcome-banner">
+      <div class="welcome-content">
+        <div class="welcome-text">
+          <h1>Welcome back!</h1>
+          <p>Here's your bus tracking and safety overview for today</p>
+        </div>
+        <div class="welcome-stats">
+          <div class="welcome-stat">
+            <div class="welcome-stat-number">156</div>
+            <div class="welcome-stat-label">Active Buses</div>
+          </div>
+          <div class="welcome-stat">
+            <div class="welcome-stat-number">2,847</div>
+            <div class="welcome-stat-label">Passengers</div>
+          </div>
+          <div class="welcome-stat">
+            <div class="welcome-stat-number">94.5%</div>
+            <div class="welcome-stat-label">Safety Score</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="track-bus-section">
+        <button class="track-bus-btn" onclick="window.location.href='userdashboard.html'">
+          <div class="track-icon">📍</div>
+          <div class="track-text">
+            <h3>Track Your Bus</h3>
+            <p>Click to view live bus locations and routes</p>
+          </div>
+          <div class="track-arrow">→</div>
+        </button>
+      </div>
+
+      <div class="quick-actions">
+        <h2 class="section-title"><span>⚡</span> Quick Actions</h2>
+        <div class="action-buttons">
+          <button class="action-btn">
+            <div class="action-text">
+              <h3>Track Bus</h3>
+              <p>Find your bus</p>
+            </div>
+          </button>
+          <button class="action-btn">
+            <div class="action-text">
+              <h3>Report Issue</h3>
+              <p>Safety concerns</p>
+            </div>
+          </button>
+          <button class="action-btn">
+            <div class="action-text">
+              <h3>View Schedule</h3>
+              <p>Bus timings</p>
+            </div>
+          </button>
+          <button class="action-btn">
+            <div class="action-text">
+              <h3>Analytics</h3>
+              <p>View reports</p>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-section">
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon safety-icon">🛡</div>
+          <div>
+            <div class="stat-value">94.5%</div>
+            <div class="stat-label">Safety Score</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-sidebar" id="rightSidebar">
+    <div class="sidebar-header">
+      <h3 class="sidebar-title">User Profile</h3>
+      <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+    </div>
+
+    <div class="profile-section">
+      <div class="profile-pic" id="userAvatar"
+        style="background: #3b82f6; color: white; display: flex; align-items: center; justify-content: center; font-size: 30px; border-radius: 50%; width: 60px; height: 60px; margin: 0 auto;">
+        U
+      </div>
+      <div class="profile-name" id="dropdownFullName" style="text-align: center; font-weight: bold; margin-top: 10px;">
+        Loading Name...</div>
+      <div class="profile-role" id="dropdownUserId" style="text-align: center; color: gray; font-size: 12px;">Loading
+        ID...
+      </div>
+
+      <div class="profile-stats">
+        <div class="profile-stat">
+          <div class="profile-stat-number" id="busesCount">0</div>
+          <div class="profile-stat-label">Buses Travelled</div>
+        </div>
+        <div class="profile-stat">
+          <div class="profile-stat-number" id="reportsCount">0</div>
+          <div class="profile-stat-label">Report Initiated</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-details">
+      <div class="info-box">
+        <label>Email:</label>
+        <span id="userEmailDisplay">Loading Email...</span>
+      </div>
+      <div class="info-box">
+        <label>Phone:</label>
+        <span id="userPhoneDisplay">Loading Phone...</span>
+      </div>
+    </div>
+
+    <div class="quick-stats">
+      <h3 style="margin-bottom: 20px; color: #2d3748; font-size: 16px;">Today's Overview</h3>
+      <div class="stat-item">
+        <span class="stat-label">Reports handled:</span>
+        <span class="stat-value" id="reportsHandled">0</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="../../js/PROJECT/auth.js"></script>
+  <script src="../../js/PROJECT/newdashboard.js"></script>
+
+  <script>
+    function forceUpdateSidebar() {
+      const storedUser = localStorage.getItem('currentUser') || localStorage.getItem('trackbus_user');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        if (document.getElementById('dropdownFullName')) document.getElementById('dropdownFullName').textContent = user.name || user.fullName;
+        if (document.getElementById('dropdownUserId')) document.getElementById('dropdownUserId').textContent = user.userId || user.id || "User";
+        if (document.getElementById('userEmailDisplay')) document.getElementById('userEmailDisplay').textContent = user.email;
+        if (document.getElementById('userPhoneDisplay')) document.getElementById('userPhoneDisplay').textContent = user.phone || "N/A";
+        if (document.getElementById('userAvatar')) {
+          const initial = (user.name || "U").charAt(0).toUpperCase();
+          document.getElementById('userAvatar').textContent = initial;
+        }
+        console.log("Sidebar data forced from local storage.");
+      }
+    }
+    // Runs when window loads
+    window.addEventListener('load', forceUpdateSidebar);
+    // Runs a second time after 500ms just in case newdashboard.js overwrote it
+    setTimeout(forceUpdateSidebar, 500);
+  </script>
+</body>
+
+</html>

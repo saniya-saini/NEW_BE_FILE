@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TrackBus Schedule</title>
+  <link rel="stylesheet" href="../../css/PROJECT/newdashboard.css">
+  <link rel="stylesheet" href="../../css/PROJECT/busschedule.css">
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="logo-section">
+      <div class="logo">
+        
+        <span>TrackBus</span>
+      </div>
+    </div>
+    <div class="nav-menu">
+      <a href="newdashboard.html" class="nav-item"><span>Dashboard</span></a>
+      <a href="busschedule.html" class="nav-item active"><span>Schedule</span></a>
+      <a href="reporting.html" class="nav-item"><span>Report</span></a>
+      <a href="review.html" class="nav-item"><span>Review</span></a>
+      <a href="book-ticket.html" class="nav-item"><span>Book A Ticket</span></a>
+    </div>
+    <div class="sign-out">
+      <div>↪</div>
+      <span>Sign out</span>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <div class="search-icon" onclick="openSearch()">🔍</div>
+  </div>
+
+  <div class="search-modal" id="searchModal">
+    <div class="search-modal-content">
+      <div class="search-modal-header">
+        <h2>🔍 Search Buses</h2>
+        <button class="close-search" onclick="closeSearch()">✕</button>
+      </div>
+      <div class="search-input-container">
+        <input type="text" id="searchInput" placeholder="Search by route, origin, destination..." />
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <header>
+      <h1>Bus Schedule</h1>
+      <div class="filters">
+        <input type="time" id="timeFilter" />
+        <select id="operatorFilter">
+          <option value="">Any Operator</option>
+          <option value="Haryana Roadways">Haryana Roadways</option>
+          <option value="Punjab Roadways">Punjab Roadways</option>
+          <option value="Private">Private</option>
+        </select>
+        <input type="text" id="originFilter" placeholder="Origin" />
+        <input type="text" id="destinationFilter" placeholder="Destination" />
+        <button class="filter-button" onclick="applyFilters()">Apply</button>
+        <button class="clear-button" onclick="clearFilters()">Clear</button>
+      </div>
+    </header>
+
+    <div class="bus-list">
+      <div class="results-info" id="resultsCount">Loading bus schedules...</div>
+
+      <div class="bus-header bus-grid">
+        <div>Route</div>
+        <div>Origin</div>
+        <div>Destination</div>
+        <div>Dep.</div>
+        <div>Arr.</div>
+        <div>Duration</div>
+        <div>Location</div>
+        <div>Operator</div>
+        <div>Status</div>
+      </div>
+
+      <div id="busListContainer">
+        <div class="loading">Loading...</div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="../../js/PROJECT/busschedule.js">
+</script>
+</html>

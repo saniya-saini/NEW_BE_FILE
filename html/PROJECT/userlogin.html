@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login - TrackBus</title>
+    <link rel="stylesheet" href="../../css/PROJECT/newdashboard.css">
+    <link rel="stylesheet" href="../../css/PROJECT/userlogin.css">
+    <style>
+        .password-strength {
+            margin-top: 8px;
+        }
+
+        .strength-bar-container {
+            width: 100%;
+            height: 6px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .strength-bar.weak {
+            background-color: #ff4444;
+        }
+
+        .strength-bar.medium {
+            background-color: #ffa500;
+        }
+
+        .strength-bar.strong {
+            background-color: #00C851;
+        }
+
+        .strength-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .strength-feedback {
+            font-size: 11px;
+            color: #888;
+        }
+
+        .form-group input.invalid {
+            border-color: #ff4444;
+        }
+
+        .forgot-password-link {
+            text-align: right;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+
+        .forgot-password-link a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .forgot-password-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content h2 {
+            color: #28a745;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .modal-content p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .user-id-display {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 2px dashed #007bff;
+        }
+
+        .user-id-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .user-id-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #007bff;
+            letter-spacing: 2px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .copy-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .continue-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .continue-btn:hover {
+            background-color: #218838;
+        }
+
+        .warning-text {
+            font-size: 13px;
+            color: #856404;
+            background-color: #fff3cd;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            border: 1px solid #ffeaa7;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="icon">👤</div>
+            <h1 id="headerTitle">User Login</h1>
+            <p id="headerSubtitle">Track your bus in real-time</p>
+        </div>
+
+        <div class="login-body">
+            <div id="errorMessage" class="error-message" style="color: red; padding: 10px; display: none;"></div>
+            <div id="successMessage" class="success-message"></div>
+
+            <!-- Login Form -->
+            <form id="userLoginForm">
+                <div class="form-group">
+                    <label for="loginUserId">User ID</label>
+                    <input type="text" id="loginUserId" placeholder="Enter your user ID" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+
+                <div class="forgot-password-link">
+                    <a id="showForgotPassword">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn">Login</button>
+
+                <div class="toggle-text">
+                    Don't have an account? <a id="showRegister">Create Account</a>
+                </div>
+            </form>
+
+            <!-- Registration Form -->
+            <form id="userRegisterForm" class="hidden">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" placeholder="Enter your full name (First Last)" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="registerPhone">Phone Number</label>
+                    <input type="tel" id="registerPhone" placeholder="Enter 10-digit phone number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" placeholder="Create a strong password" required
+                        minlength="6">
+                    <div class="password-strength">
+                        <div class="strength-bar-container">
+                            <div class="strength-bar" id="passwordStrengthBar"></div>
+                        </div>
+                        <div class="strength-text">
+                            <span id="passwordStrengthText"></span>
+                            <span class="strength-feedback" id="passwordStrengthFeedback"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="registerConfirmPassword">Confirm Password</label>
+                    <input type="password" id="registerConfirmPassword" placeholder="Confirm your password" required>
+                </div>
+
+                <button type="submit" class="btn">Create Account</button>
+
+                <div class="toggle-text">
+                    Already have an account? <a id="showLogin">Login</a>
+                </div>
+            </form>
+
+            <!-- Forgot Password Form -->
+            <form id="forgotPasswordForm" class="hidden">
+                <div class="form-group">
+                    <label for="forgotEmail">Email Address</label>
+                    <input type="email" id="forgotEmail" placeholder="Enter your registered email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" placeholder="Enter new password" required minlength="6">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmNewPassword">Confirm New Password</label>
+                    <input type="password" id="confirmNewPassword" placeholder="Confirm new password" required>
+                </div>
+
+                <button type="submit" class="btn">Reset Password</button>
+
+                <div class="toggle-text">
+                    <a id="backToLogin">Back to Login</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="login-footer">
+            Are you a driver? <a href="driverlogin.html">Driver Login</a>
+        </div>
+    </div>
+
+    <!-- User ID Modal -->
+    <div id="userIdModal" class="modal">
+        <div class="modal-content">
+            <h2>🎉 Account Created Successfully!</h2>
+            <p>Your user account has been created. Please save your User ID for future logins.</p>
+
+            <div class="user-id-display">
+                <div class="user-id-label">Your User ID</div>
+                <div class="user-id-value" id="userIdDisplay">USR0000</div>
+            </div>
+
+            <div class="warning-text">
+                ⚠️ Important: Save this ID! You'll need it to login to your account.
+            </div>
+
+            <div class="modal-buttons">
+                <button class="modal-btn copy-btn" onclick="copyUserId()">📋 Copy ID</button>
+                <button class="modal-btn continue-btn"
+                    onclick="closeUserIdModal(); document.getElementById('showLogin').click(); document.getElementById('loginUserId').value = document.getElementById('userIdDisplay').textContent;">
+                    Continue to Login
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/PROJECT/auth.js"></script>
+    <script src="../../js/PROJECT/userlogin.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - TrackBus</title>
+    <link rel="stylesheet" href="../../css/PROJECT/userdashboard.css">
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="header">
+            <h1>👤 User Dashboard</h1>
+            <div class="user-info">
+                <div id="userName" style="font-size: 18px; font-weight: 600;">Loading...</div>
+
+            </div>
+        </div>
+
+        <div class="main-grid">
+
+            <div class="card">
+                <h2>🔍 Track Bus</h2>
+
+                <div id="userLocationStatus">
+                    🔄 Getting your location...
+                </div>
+
+                <div class="form-group">
+                    <label for="busIdInput">Enter Bus Number</label>
+                    <input type="text" id="busIdInput" placeholder="e.g., MH12AB1234">
+                </div>
+
+                <button id="trackBtn" class="btn">🔍 Track Bus</button>
+                <div id="status">
+                    Enter a bus number and click "Track Bus" to get started.
+                </div>
+
+                <div id="busInfo"></div>
+
+                <div id="routeInfo"></div>
+            </div>
+
+            <div class="card">
+                <h2>🗺 Live Map</h2>
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/PROJECT/auth.js"></script>
+    <script src="../../js/PROJECT/userdashboard.js"></script>
+    <script src="../../js/PROJECT/dashboard-auth.js"></script>
+
+    <h2 id="userName">Welcome, User</h2>
+
+    <button onclick="handleLogout()" class="logout-btn">Logout</button>
+</body>
+
+</html>

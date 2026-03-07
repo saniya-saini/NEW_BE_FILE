@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackBus - Reviews</title>
+    <link rel="icon" type="image/x-icon" href="https://www.citypng.com/public/uploads/preview/round-blue-autobus-autocar-bus-station-icon-701751694972515da9abrwr17.png?v=2025082221">
+    <link rel="stylesheet" href="../../css/PROJECT/newdashboard.css">
+    <link rel="stylesheet" href="../../css/PROJECT/review.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Left Sidebar - Exact copy from Dashboard -->
+        <div class="sidebar">
+            <div class="logo-section">
+                <div class="logo">
+                    
+                    <span>TrackBus</span>
+                </div>
+            </div>
+
+            <div class="nav-menu">
+                <a href="newdashboard.html" class="nav-item"><span>Dashboard</span></a>
+                <a href="busschedule.html" class="nav-item"><span>Schedule</span></a>
+                <a href="reporting.html" class="nav-item"><span>Report</span></a>
+                <a href="review.html" class="nav-item active"><span>Review</span></a>
+                <a href="book-ticket.html" class="nav-item"><span>Book A Ticket</span></a>
+            </div>
+
+            <div class="sign-out">
+                <div class="nav-icon">↪</div>
+                <span>Sign out</span>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header-banner">
+                <div class="banner-content">
+                    <h1>Bus Reviews</h1>
+                    <p>Share your experience and read reviews from other passengers</p>
+                </div>
+                <div class="header-icons">
+                    <span class="hamburger-icon">≡</span>
+                    <span class="user-profile-icon">👤</span>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-section">
+                <div class="stat-card">
+                    <div class="stat-icon">★</div>
+                    <div class="stat-content">
+                        <h3>4.2</h3>
+                        <p>Average Rating</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💬</div>
+                    <div class="stat-content">
+                        <h3>1,247</h3>
+                        <p>Total Reviews</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👍</div>
+                    <div class="stat-content">
+                        <h3>89%</h3>
+                        <p>Positive Reviews</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Form -->
+            <div class="review-form-section">
+                <h2>Write a Review</h2>
+                <form class="review-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="routeSelect">Select Route</label>
+                            <select id="routeSelect" required>
+                                <option value="">Choose a route</option>
+                                <option value="HR26">HR26 - Chandigarh to Ambala</option>
+                                <option value="PB21">PB21 - Ludhiana to Patiala</option>
+                                <option value="PB07">PB07 - Amritsar to Jalandhar</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Rating</label>
+                            <div class="review-rating">
+                                <input type="radio" id="star1" name="rating" value="1">
+                                <label for="star1">★</label>
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2">★</label>
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3">★</label>
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4">★</label>
+                                <input type="radio" id="star5" name="rating" value="5">
+                                <label for="star5">★</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group form-group--full">
+                            <label for="reviewText">Your Review</label>
+                            <textarea id="reviewText" rows="4" placeholder="Write your review here...(max 200 words)" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form__actions">
+                            <button type="submit" class="btn btn--primary">Submit Review</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Reviews List -->
+            <div class="reviews-section">
+                <div class="section-header">
+                    <h2>Recent Reviews</h2>
+                    <div class="sort-options">
+                        <select>
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="highest">Highest Rating</option>
+                            <option value="lowest">Lowest Rating</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="reviews-list">
+                    <!-- Sample Review 1 -->
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="review-route">HR26</div>
+                            <div class="review-rating-display">
+                                <span>★</span>
+                                <span>★</span>
+                                <span>★</span>
+                                <span>★</span>
+                                <span>★</span>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <div class="review-text">
+                                Excellent service! The bus was clean, comfortable, and arrived exactly on time. The driver was professional and the journey was smooth. Highly recommended for anyone traveling between Chandigarh and Ambala.
+                            </div>
+                        </div>
+                        <div class="review-meta">
+                            <span class="review-author">Rajesh Kumar</span>
+                            <span class="review-date">2 days ago</span>
+                        </div>
+                    </div>
+
+                    <!-- Sample Review 2 -->
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="review-route">PB21</div>
+                            <div class="review-rating-display">
+                                <span>★</span>
+                                <span>★</span>
+                                <span>★</span>
+                                <span>★</span>
+                                <span>☆</span>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <div class="review-text">
+                                Good overall experience. The bus was comfortable and the staff was helpful. However, there was a slight delay of about 10 minutes. The route is convenient and the price is reasonable.
+                            </div>
+                        </div>
+                        <div class="review-meta">
+                            <span class="review-author">Priya Sharma</span>
+                            <span class="review-date">5 days ago</span>
+                        </div>
+                    </div>
+
+                    <!-- Sample Review 3 -->
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="review-route">PB07</div>
+                            <div class="review-rating-display">
+                                <span>★</span>
+                                <span>★</span>
+                                <span>★</span>
+                                <span>☆</span>
+                                <span>☆</span>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <div class="review-text">
+                                Average service. The bus was okay but could be cleaner. The journey took longer than expected due to traffic. The driver was friendly though. Would consider other options next time.
+                            </div>
+                        </div>
+                        <div class="review-meta">
+                            <span class="review-author">Amit Singh</span>
+                            <span class="review-date">1 week ago</span>
+                        </div>
+                    </div>
+
+                    <!-- Sample Review 4 -->
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="review-route">HR26</div>
+                            <div class="review-rating-display">
+                                <span>★</span>
+                                <span>★</span>
+                                <span>★</span>
+                                <span>★</span>
+                                <span>★</span>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <div class="review-text">
+                                Outstanding service! The bus was spotless, seats were very comfortable, and the air conditioning worked perfectly. The driver was courteous and drove safely. Will definitely use this service again.
+                            </div>
+                        </div>
+                        <div class="review-meta">
+                            <span class="review-author">Sneha Patel</span>
+                            <span class="review-date">1 week ago</span>
+                        </div>
+                    </div>
+
+                    <!-- Sample Review 5 -->
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="review-route">PB21</div>
+                            <div class="review-rating-display">
+                                <span>★</span>
+                                <span>★</span>
+                                <span>★</span>
+                                <span>★</span>
+                                <span>★</span>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <div class="review-text">
+                                Perfect journey! The bus was on time, clean, and comfortable. The staff was very helpful and the journey was smooth. Great value for money. Highly recommended!
+                            </div>
+                        </div>
+                        <div class="review-meta">
+                            <span class="review-author">Vikram Mehta</span>
+                            <span class="review-date">2 weeks ago</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="load-more">
+                    <button class="load-more-btn">+ Load More Reviews</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar" id="rightSidebar">
+            <div class="sidebar-header">
+                <h3 class="sidebar-title">User Profile</h3>
+                <button class="close-sidebar" id="closeSidebar">&times;</button>
+            </div>
+
+            <div class="profile-section">
+                <div class="profile-pic">👤</div>
+                <h4 class="profile-name">John Doe</h4>
+                <p class="profile-role">Premium User</p>
+
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <span class="profile-stat-number">12</span>
+                        <span class="profile-stat-label">Trips</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="profile-stat-number">4.8</span>
+                        <span class="profile-stat-label">Rating</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="profile-stat-number">2</span>
+                        <span class="profile-stat-label">Years</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="user-details">
+                <div class="detail-item">
+                    <div class="detail-icon">📧</div>
+                    <div class="detail-content">
+                        <h4>Email</h4>
+                        <p>john.doe@example.com</p>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon">📱</div>
+                    <div class="detail-content">
+                        <h4>Phone</h4>
+                        <p>+91 98765 43210</p>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon">📍</div>
+                    <div class="detail-content">
+                        <h4>Location</h4>
+                        <p>Chandigarh, India</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Total Reviews</span>
+                    <span class="stat-value">24</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Active Bookings</span>
+                    <span class="stat-value completed">1</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Pending Reviews</span>
+                    <span class="stat-value progress">2</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Support Tickets</span>
+                    <span class="stat-value overdue">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="../../js/PROJECT/review.js"></script>
+</body>
+</html>
