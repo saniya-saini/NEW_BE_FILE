@@ -1,0 +1,13 @@
+{
+  "name": "trackbus-node-server",
+  "version": "1.0.0",
+  "description": "Express server to serve existing TrackBus HTML/CSS/JS frontend without UI changes.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.0"
+  }
+}
+

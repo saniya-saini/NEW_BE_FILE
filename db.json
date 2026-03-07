@@ -1,0 +1,407 @@
+{
+  "cities": [
+    {
+      "id": "1",
+      "name": "Ambala"
+    },
+    {
+      "id": "2",
+      "name": "Faridabad"
+    },
+    {
+      "id": "3",
+      "name": "Gurugram"
+    },
+    {
+      "id": "4",
+      "name": "Hisar"
+    },
+    {
+      "id": "5",
+      "name": "Karnal"
+    },
+    {
+      "id": "6",
+      "name": "Kurukshetra"
+    },
+    {
+      "id": "7",
+      "name": "Panipat"
+    },
+    {
+      "id": "8",
+      "name": "Rohtak"
+    },
+    {
+      "id": "9",
+      "name": "Sonipat"
+    },
+    {
+      "id": "10",
+      "name": "Chandigarh"
+    },
+    {
+      "id": "11",
+      "name": "Amritsar"
+    },
+    {
+      "id": "12",
+      "name": "Bathinda"
+    },
+    {
+      "id": "13",
+      "name": "Jalandhar"
+    },
+    {
+      "id": "14",
+      "name": "Ludhiana"
+    },
+    {
+      "id": "15",
+      "name": "Mohali"
+    },
+    {
+      "id": "16",
+      "name": "Patiala"
+    },
+    {
+      "id": "17",
+      "name": "Pathankot"
+    },
+    {
+      "id": "18",
+      "name": "Rupnagar"
+    },
+    {
+      "id": "19",
+      "name": "Sangrur"
+    },
+    {
+      "id": "20",
+      "name": "Zirakpur"
+    },
+    {
+      "id": "21",
+      "name": "Kharar"
+    },
+    {
+      "id": "22",
+      "name": "Jaipur"
+    },
+    {
+      "id": "23",
+      "name": "Delhi"
+    }
+  ],
+  "routes": [
+    {
+      "id": "1",
+      "from": "Chandigarh",
+      "to": "Patiala",
+      "buses": [
+        {
+          "busId": "PB01GV3454",
+          "name": "Punjab Roadways",
+          "type": "AC Sleeper",
+          "departureTime": "08:30 AM",
+          "duration": "1h 30m",
+          "arrivalTime": "10:00 AM",
+          "price": "500",
+          "seatsLeft": 32,
+          "amenities": [
+            "AC",
+            "Sleeper",
+            "Water Bottle"
+          ]
+        },
+        {
+          "busId": "PB65GV7867",
+          "name": "CTU Express",
+          "type": "Non-AC Seater",
+          "departureTime": "09:00 AM",
+          "duration": "1h 45m",
+          "arrivalTime": "10:45 AM",
+          "price": "120",
+          "seatsLeft": 45,
+          "amenities": [
+            "Non-AC"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "from": "Ambala",
+      "to": "Ludhiana",
+      "buses": [
+        {
+          "busId": "HR06GV4565",
+          "name": "Haryana Roadways",
+          "type": "AC Seater",
+          "departureTime": "09:45 AM",
+          "duration": "5h 15m",
+          "arrivalTime": "03:00 PM",
+          "price": "950",
+          "seatsLeft": 18,
+          "amenities": [
+            "AC",
+            "Charging Point"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "from": "Gurugram",
+      "to": "Amritsar",
+      "buses": [
+        {
+          "busId": "PB66GV6756",
+          "name": "Punjab Roadways",
+          "type": "Non-AC Sleeper",
+          "departureTime": "10:30 PM",
+          "duration": "14h 30m",
+          "arrivalTime": "01:00 PM",
+          "price": "850",
+          "seatsLeft": 25,
+          "amenities": [
+            "Sleeper"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "from": "Karnal",
+      "to": "Jalandhar",
+      "buses": [
+        {
+          "busId": "HR45GV6750",
+          "name": "Haryana Roadways",
+          "type": "Non-AC Sleeper",
+          "departureTime": "07:15 AM",
+          "duration": "5h 45m",
+          "arrivalTime": "01:00 PM",
+          "price": "380",
+          "seatsLeft": 15,
+          "amenities": [
+            "Non-AC"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "from": "Patiala",
+      "to": "Hisar",
+      "buses": [
+        {
+          "busId": "PB56GV5431",
+          "name": "Punjab Roadways",
+          "type": "AC Volvo",
+          "departureTime": "11:30 AM",
+          "duration": "4h 15m",
+          "arrivalTime": "03:45 PM",
+          "price": "420",
+          "seatsLeft": 8,
+          "amenities": [
+            "AC",
+            "WiFi",
+            "Reclining Seat"
+          ]
+        }
+      ]
+    }
+  ],
+  "tickets": [
+    {
+      "id": "DL67GV5437",
+      "from": "Delhi",
+      "to": "Chandigarh",
+      "date": "2023-10-15",
+      "departureTime": "08:30 AM",
+      "arrivalTime": "12:30 PM",
+      "busName": "Volvo A/C Sleeper",
+      "seatNumber": "A4",
+      "status": "Completed",
+      "price": "₹550"
+    },
+    {
+      "id": "PB57GV7766",
+      "from": "Chandigarh",
+      "to": "Amritsar",
+      "date": "2023-11-20",
+      "departureTime": "10:00 AM",
+      "arrivalTime": "03:30 PM",
+      "busName": "Punjab Roadways Express",
+      "seatNumber": "B7",
+      "status": "Cancelled",
+      "price": "₹450"
+    },
+    {
+      "id": "HR90AV4589",
+      "from": "Gurugram",
+      "to": "Jaipur",
+      "date": "2023-12-05",
+      "departureTime": "07:00 AM",
+      "arrivalTime": "01:00 PM",
+      "busName": "Rajasthan State Deluxe",
+      "seatNumber": "C2",
+      "status": "Upcoming",
+      "price": "₹600"
+    }
+  ],
+  "tracking": [
+    {
+      "ticketId": "TKT123456",
+      "currentLocation": {
+        "lat": 28.6139,
+        "lng": 77.209
+      },
+      "destination": {
+        "lat": 30.7333,
+        "lng": 76.7794
+      },
+      "estimatedArrival": "12:30 PM",
+      "currentSpeed": "65 km/h",
+      "distanceRemaining": "45 km",
+      "nextStop": "Karnal Bus Terminal",
+      "nextStopTime": "11:15 AM",
+      "status": "On Time",
+      "lastUpdated": "10:45 AM",
+      "id": "7033"
+    },
+    {
+      "ticketId": "TKT789012",
+      "currentLocation": {
+        "lat": 30.7333,
+        "lng": 76.7794
+      },
+      "destination": {
+        "lat": 31.634,
+        "lng": 74.8723
+      },
+      "estimatedArrival": "03:30 PM",
+      "currentSpeed": "70 km/h",
+      "distanceRemaining": "120 km",
+      "nextStop": "Ludhiana Bus Terminal",
+      "nextStopTime": "12:00 PM",
+      "status": "On Time",
+      "lastUpdated": "10:30 AM",
+      "id": "1062"
+    },
+    {
+      "ticketId": "TKT345678",
+      "currentLocation": {
+        "lat": 28.4595,
+        "lng": 77.0266
+      },
+      "destination": {
+        "lat": 26.9124,
+        "lng": 75.7873
+      },
+      "estimatedArrival": "01:00 PM",
+      "currentSpeed": "75 km/h",
+      "distanceRemaining": "200 km",
+      "nextStop": "Behror Bus Stop",
+      "nextStopTime": "09:30 AM",
+      "status": "Delayed by 15 min",
+      "lastUpdated": "08:45 AM",
+      "id": "a040"
+    }
+  ],
+  "drivers": [],
+  "users": [],
+  "buses": [
+    {
+      "busId": "BUS_101",
+      "routeNumber": "101",
+      "routeName": "City Center to Airport",
+      "capacity": 50,
+      "driver": "DRV001",
+      "status": "in-service",
+      "currentLocation": {
+        "lat": 40.7128,
+        "lng": -74.006,
+        "timestamp": null
+      },
+      "id": "9f45"
+    },
+    {
+      "busId": "BUS_102",
+      "routeNumber": "102",
+      "routeName": "Downtown to University",
+      "capacity": 50,
+      "driver": "DRV002",
+      "status": "in-service",
+      "currentLocation": {
+        "lat": 40.758,
+        "lng": -73.9855,
+        "timestamp": null
+      },
+      "id": "8140"
+    }
+  ],
+  "locations": {
+    "BUS_101": {
+      "lat": 40.7128,
+      "lng": -74.006,
+      "timestamp": null,
+      "speed": 0
+    },
+    "BUS_102": {
+      "lat": 40.758,
+      "lng": -73.9855,
+      "timestamp": null,
+      "speed": 0
+    }
+  },
+  "reports": [],
+  "reviews": [
+    {
+      "id": "rev_1772872176111_7wl4c4o",
+      "route": "PB21",
+      "rating": 4,
+      "text": "hi",
+      "reviewText": "hi",
+      "author": "Anonymous User",
+      "userName": "Anonymous User",
+      "date": "2026-03-07T08:29:35.842Z",
+      "createdAt": "2026-03-07T08:29:35.842Z"
+    }
+  ],
+  "bus": [
+    {
+      "id": "BUS001",
+      "lat": 28.7041,
+      "lng": 77.1025,
+      "speed": 45,
+      "timestamp": 1698765432000
+    },
+    {
+      "id": "BUS002",
+      "lat": 28.5355,
+      "lng": 77.391,
+      "speed": 60,
+      "timestamp": 1698765432000
+    }
+  ],
+  "businfo": [
+    {
+      "busId": "HR01GV1234",
+      "lat": 30.483997,
+      "lng": 76.59,
+      "speed": 45,
+      "timestamp": 1,
+      "id": "b4e4"
+    },
+    {
+      "busId": "HR04GV8795",
+      "lat": 30.3625,
+      "lng": 76.787,
+      "speed": 60,
+      "timestamp": 3,
+      "id": "951a"
+    }
+  ]
+}
