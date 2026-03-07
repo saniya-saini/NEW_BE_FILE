@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackBus - Book Ticket & Track</title>
+    <link rel="icon" type="image/x-icon" href="https://www.citypng.com/public/uploads/preview/round-blue-autobus-autocar-bus-station-icon-701751694972515da9abrwr17.png?v=2025082221">
+    <link rel="stylesheet" href="../../css/PROJECT/newdashboard.css">
+    <link rel="stylesheet" href="../../css/PROJECT/book-ticket.css">
+</head>
+<body>
+    <div id="custom-modal" class="modal-overlay" onclick="this.classList.remove('active')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span id="modal-message-content"></span>
+            <button onclick="document.getElementById('custom-modal').classList.remove('active')">OK</button>
+        </div>
+    </div>
+    
+    <div class="sidebar">
+        <div class="logo-section">
+            <div class="logo">
+                
+                TrackBus
+            </div>
+        </div>
+        <div class="nav-menu">
+            <a href="newdashboard.html" class="nav-item"><span>Dashboard</span></a>
+            <a href="busschedule.html" class="nav-item"><span>Schedule</span></a>
+            <a href="reporting.html" class="nav-item"><span>Report</span></a>
+            <a href="review.html" class="nav-item"><span>Review</span></a>
+            <a href="book-ticket.html" class="nav-item active"><span>Book Ticket</span></a>
+        </div>
+
+        <a href="#" class="sign-out">
+            <div class="nav-icon">↪</div>
+            Sign out
+        </a>
+    </div>
+
+    <div class="main-content">
+        <div class="header-banner">
+            <div class="banner-content">
+                <h1>Bus Operations Hub</h1>
+                <p>Find, book, and track bus tickets for internal operations</p>
+            </div>
+            <div class="header-icons">
+                <span class="hamburger-icon">≡</span>
+                <span class="user-profile-icon">👤</span>
+            </div>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="booking-form-section">
+                <h2>Search for Buses</h2>
+                <form class="booking-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="departure">From</label>
+                            <select id="departure" required>
+                                <option value="" disabled selected>Select Departure City</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="destination">To</label>
+                            <select id="destination" required>
+                                <option value="" disabled selected>Select Destination City</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="travel-date">Travel Date</label>
+                            <input type="date" id="travel-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="passengers">Passengers</label>
+                            <select id="passengers" required>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <button type="submit" class="search-btn">Search Buses</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="available-buses-section">
+                <h2>Available Buses</h2>
+                <div class="bus-list">
+                    <div class="no-buses-message">Use the form above to search for available bus routes.</div>
+                </div>
+            </div>
+
+            <div class="popular-routes-section">
+                <h2>Popular Routes</h2>
+                <div class="routes-grid">
+                    <div class="route-card">
+                        <div class="route-name">Chandigarh → Patiala</div>
+                        <div class="route-info">Daily 30+ buses</div>
+                        <div class="route-price">Starting from ₹120</div>
+                    </div>
+                    <div class="route-card">
+                        <div class="route-name">Ambala → Ludhiana</div>
+                        <div class="route-info">Daily 25+ buses</div>
+                        <div class="route-price">Starting from ₹180</div>
+                    </div>
+                    <div class="route-card">
+                        <div class="route-name">Gurugram → Amritsar</div>
+                        <div class="route-info">Daily 15+ buses</div>
+                        <div class="route-price">Starting from ₹450</div>
+                    </div>
+                    <div class="route-card">
+                        <div class="route-name">Karnal → Jalandhar</div>
+                        <div class="route-info">Daily 20+ buses</div>
+                        <div class="route-price">Starting from ₹250</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ticket-history-section">
+                <h2>Your Ticket History</h2>
+                <div class="ticket-history-container">
+                    <div class="no-tickets-message">Loading your ticket history...</div>
+                </div>
+            </div>
+
+            <div class="bus-tracking-section">
+                <h2>Track Your Bus</h2>
+                <div class="tracking-search">
+                    <input type="text" id="tracking-id" placeholder="Enter Ticket/PNR Number (e.g., TKT789012)">
+                    <button id="track-bus-btn">Track Now</button>
+                </div>
+                <div class="tracking-result">
+                    <div class="tracking-map" id="tracking-map">
+                        <div class="map-placeholder">Enter your ticket number to track your bus</div>
+                    </div>
+                    <div class="tracking-info" id="tracking-info">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/PROJECT/book-ticket.js"></script>
+</body>
+</html>

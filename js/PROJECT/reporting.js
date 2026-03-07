@@ -126,14 +126,14 @@ document.querySelector('form')?.addEventListener('submit', async function(e) {
 
   const formData = {
     reportType: selectedReportType,
-    busNumber: document.getElementById('busNumber').value,
+    busNumber: busNumber,
     location: document.querySelectorAll('input[type="text"]')[1].value,
     date: document.querySelector('input[type="date"]').value,
     time: document.querySelector('input[type="time"]').value,
     description: document.querySelector('textarea').value,
     severity: document.querySelector('input[name="severity"]:checked')?.id || 'Not specified',
     rating: document.querySelector('input[name="rating"]:checked')?.value || 'Not rated',
-};
+  };
 
   if (!formData.busNumber || !formData.location || 
       !formData.date || !formData.time || !formData.description) {

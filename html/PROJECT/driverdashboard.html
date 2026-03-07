@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Dashboard - TrackBus</title>
+    <link rel="stylesheet" href="../../css/PROJECT/driverdashboard.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>🚌 Driver Dashboard</h1>
+            <div class="user-info">
+                <div id="driverName" style="font-size: 18px; font-weight: 600;">Loading...</div>
+                <div id="busId" style="font-size: 14px; opacity: 0.8; margin-top: 4px;">Loading...</div>
+                <a href="driverlogin.html" class="logout-btn">Logout</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 style="margin-bottom: 20px;">Location Sharing</h2>
+
+            <div class="form-group">
+                <label for="busNumberInput">Bus Number</label>
+                <input type="text" id="busNumberInput" placeholder="Enter your bus number" disabled>
+            </div>
+
+            <p id="status">Enter bus number and press start to share your location.</p>
+
+            <div>
+                <button id="start" class="btn">▶ Start Sharing Location</button>
+                <button id="stop" class="btn stop">⏹ Stop Sharing</button>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>📍 Current Location</h3>
+                    <div class="value" id="currentLoc">Waiting...</div>
+                </div>
+                <div class="info-card">
+                    <h3>⚡ Speed</h3>
+                    <div class="value" id="speed">0 km/h</div>
+                </div>
+                <div class="info-card">
+                    <h3>🔋 Status</h3>
+                    <div class="value">
+                        <span id="statusBadge" class="status-badge status-inactive">Offline</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/PROJECT/driverdashboard.js"></script>
+</body>
+
+</html>
