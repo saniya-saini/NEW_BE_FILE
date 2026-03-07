@@ -403,5 +403,79 @@
       "timestamp": 3,
       "id": "951a"
     }
+  ],
+  "busschedules": [
+    {
+      "id": "1",
+      "route": "HR26",
+      "origin": "Chandigarh ISBT-43",
+      "destination": "Ambala Cantt",
+      "departure": "09:40",
+      "arrival": "10:15",
+      "duration": "35m",
+      "location": "ISBT Sector 43, Chandigarh",
+      "operator": "Haryana Roadways",
+      "status": "on-time"
+    },
+    {
+      "id": "2",
+      "route": "PB21",
+      "origin": "Ludhiana Bus Stand",
+      "destination": "Patiala",
+      "departure": "09:55",
+      "arrival": "10:35",
+      "duration": "40m",
+      "location": "ISBT Ludhiana",
+      "operator": "Punjab Roadways",
+      "status": "boarding"
+    },
+    {
+      "id": "3",
+      "route": "PB07",
+      "origin": "Amritsar",
+      "destination": "Jalandhar",
+      "departure": "10:05",
+      "arrival": "10:50",
+      "duration": "45m",
+      "location": "ISBT Amritsar",
+      "operator": "Punjab Roadways",
+      "status": "delayed"
+    },
+    {
+      "id": "4",
+      "route": "SRS101",
+      "origin": "Delhi",
+      "destination": "Jaipur",
+      "departure": "03:10",
+      "arrival": "09:10",
+      "duration": "6 Hrs",
+      "location": "Delhi Bus Stand",
+      "operator": "SRS Travels(Private)",
+      "status": "on-time"
+    },
+    {
+      "id": "5",
+      "route": "HR45",
+      "origin": "Kurukshetra",
+      "destination": "Karnal",
+      "departure": "11:10",
+      "arrival": "11:55",
+      "duration": "45m",
+      "location": "Kurukshetra Bus Stand",
+      "operator": "Haryana Roadways",
+      "status": "on-time"
+    },
+    {
+      "id": "6",
+      "route": "KPS201",
+      "origin": "Bangalore",
+      "destination": "Pune",
+      "departure": "11:30",
+      "arrival": "20:30",
+      "duration": "9 Hrs",
+      "location": "Majestic Bus Stand, BLR",
+      "operator": "KPS Travels(Private)",
+      "status": "boarding"
+    }
   ]
 }

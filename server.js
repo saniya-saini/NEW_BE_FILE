@@ -358,6 +358,123 @@ apiRouter.get('/booking/:id', (req, res, next) => {
 
 app.use('/', apiRouter);
 
+// ---------- Bus schedule API (/api/busschedules) ----------
+
+function isNonEmptyString(value) {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function validateBusSchedule(input) {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) {
+    return { ok: false, message: 'Bus schedule must be a JSON object.' };
+  }
+
+  const requiredFields = [
+    'route',
+    'origin',
+    'destination',
+    'departure',
+    'arrival',
+    'duration',
+    'location',
+    'operator',
+    'status'
+  ];
+
+  for (const field of requiredFields) {
+    if (!isNonEmptyString(input[field])) {
+      return { ok: false, message: `Missing or invalid field: ${field}` };
+    }
+  }
+
+  const allowedStatuses = new Set(['on-time', 'delayed', 'boarding']);
+  if (!allowedStatuses.has(String(input.status).toLowerCase())) {
+    return {
+      ok: false,
+      message: 'Invalid status. Allowed: on-time, delayed, boarding.'
+    };
+  }
+
+  return { ok: true };
+}
+
+function getNextBusScheduleId(list) {
+  const max = list.reduce((acc, item) => {
+    const n = parseInt(String(item && item.id), 10);
+    return Number.isFinite(n) ? Math.max(acc, n) : acc;
+  }, 0);
+  return String(max + 1);
+}
+
+const busRouter = express.Router();
+
+busRouter.use((req, res, next) => {
+  console.log('  -> Bus API request:', req.method, req.path);
+  next();
+});
+
+// GET /api/busschedules – all schedules
+busRouter.get('/', (req, res, next) => {
+  try {
+    const db = readDb();
+    res.json(db.busschedules || []);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /api/busschedules/:id – single schedule by id
+busRouter.get('/:id', (req, res, next) => {
+  try {
+    const db = readDb();
+    const id = String(req.params.id);
+    const list = Array.isArray(db.busschedules) ? db.busschedules : [];
+    const found = list.find(s => String(s.id) === id);
+    if (!found) {
+      return res.status(404).json({ error: 'Bus schedule not found.' });
+    }
+    res.json(found);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST /api/busschedules – add new schedule
+busRouter.post('/', (req, res, next) => {
+  try {
+    const validation = validateBusSchedule(req.body);
+    if (!validation.ok) {
+      return res.status(400).json({ error: validation.message });
+    }
+
+    const db = readDb();
+    const list = Array.isArray(db.busschedules) ? db.busschedules : [];
+
+    const newSchedule = {
+      id: getNextBusScheduleId(list),
+      route: req.body.route.trim(),
+      origin: req.body.origin.trim(),
+      destination: req.body.destination.trim(),
+      departure: req.body.departure.trim(),
+      arrival: req.body.arrival.trim(),
+      duration: req.body.duration.trim(),
+      location: req.body.location.trim(),
+      operator: req.body.operator.trim(),
+      status: String(req.body.status).toLowerCase().trim()
+    };
+
+    const updatedList = [...list, newSchedule];
+    db.busschedules = updatedList;
+    writeDb(db);
+
+    res.status(201).json(newSchedule);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.use('/api/busschedules', busRouter);
+
 // ---------- 404 handler ----------
 
 app.use((req, res, next) => {

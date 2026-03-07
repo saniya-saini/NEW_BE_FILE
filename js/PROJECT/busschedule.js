@@ -5,14 +5,14 @@
     async function loadBusData() {
       try {
         
-        const response = await fetch('busSchedule.json');
+        const response = await fetch('/api/busschedules');
         
         if (!response.ok) {
-          throw new Error('Failed to load JSON file');
+          throw new Error('Failed to load bus schedules');
         }
         
         const data = await response.json();
-        allBuses = data.buses;
+        allBuses = Array.isArray(data) ? data : (data?.busschedules || data?.buses || []);
         filteredBuses = [...allBuses];
         
         console.log(`✅ Loaded ${allBuses.length} buses from JSON`);
@@ -133,7 +133,7 @@
         `;
       }).join('');
 
-      resultsCount.textContent = Showing `${buses.length} bus${buses.length !== 1 ? 'es' : ''}`;
+      resultsCount.textContent = `Showing ${buses.length} bus${buses.length !== 1 ? 'es' : ''}`;
     }
 
     
@@ -208,12 +208,27 @@
             return;
           }
 
-          const results = allBuses.filter(bus => 
-            bus.route.toLowerCase().includes(query) ||
-            bus.origin.toLowerCase().includes(query) ||
-            bus.destination.toLowerCase().includes(query) ||
-            bus.operator.toLowerCase().includes(query)
-          );
+          // Use the currently filtered list if filters are applied,
+          // otherwise fall back to all buses.
+          const source = filteredBuses.length ? filteredBuses : allBuses;
+
+          const results = source.filter(bus => {
+            const route = (bus.route || '').toLowerCase();
+            const origin = (bus.origin || '').toLowerCase();
+            const destination = (bus.destination || '').toLowerCase();
+            const operator = (bus.operator || '').toLowerCase();
+            const location = (bus.location || '').toLowerCase();
+            const status = (bus.status || '').toLowerCase();
+
+            return (
+              route.includes(query) ||
+              origin.includes(query) ||
+              destination.includes(query) ||
+              operator.includes(query) ||
+              location.includes(query) ||
+              status.includes(query)
+            );
+          });
 
           if (results.length === 0) {
             resultsContainer.innerHTML = `
