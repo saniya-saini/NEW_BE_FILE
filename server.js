@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
+app.use(express.static(path.join(__dirname)));
 const PORT = process.env.PORT || 3000;
 const DB_PATH = path.join(__dirname, 'db.json');
 
@@ -62,12 +63,24 @@ app.get('/book-ticket.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'book-ticket.html'));
 });
 
-app.get('/review', (req, res, next) => {
-  res.sendFile(path.join(__dirname, 'review.html'));
+app.get('/newdashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'html/PROJECT/newdashboard.html'));
 });
 
-app.get('/review.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'review.html'));
+app.get('/busschedule', (req, res) => {
+  res.sendFile(path.join(__dirname, 'html/PROJECT/busschedule.html'));
+});
+
+app.get('/reporting', (req, res) => {
+  res.sendFile(path.join(__dirname, 'html/PROJECT/reporting.html'));
+});
+
+app.get('/review', (req, res) => {
+  res.sendFile(path.join(__dirname, 'html/PROJECT/review.html'));
+});
+
+app.get('/book-ticket', (req, res) => {
+  res.sendFile(path.join(__dirname, 'html/PROJECT/book-ticket.html'));
 });
 
 // ---------- API Router (router-level middleware) ----------
