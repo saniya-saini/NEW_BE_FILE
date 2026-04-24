@@ -311,7 +311,20 @@
     }
   ],
   "drivers": [],
-  "users": [],
+  "users": [
+    {
+      "userId": "USR4314",
+      "password": "@Liesha12",
+      "name": "Liesha",
+      "email": "Liesha@gmail.com"
+    },
+    {
+      "userId": "USR1234",
+      "password": "@Prisha12",
+      "name": "Prisha",
+      "email": "Prisha1@gmail.com"
+    }
+  ],
   "buses": [
     {
       "busId": "BUS_101",

@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../../Node JS BE"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "bus schedule page"
+	}
+}

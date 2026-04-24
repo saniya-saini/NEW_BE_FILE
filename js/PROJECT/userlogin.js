@@ -1,59 +1,55 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('userLoginForm');
-    const errorDiv = document.getElementById('errorMessage');
-    const successDiv = document.getElementById('successMessage');
+document.addEventListener("DOMContentLoaded", () => {
 
-    if (loginForm) {
-        // Remove any other listeners that auth.js might have added to this specific form
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            e.stopImmediatePropagation(); // Stops auth.js from interfering with the login
+    const loginForm = document.getElementById("userLoginForm");
+    const errorDiv = document.getElementById("errorMessage");
+    const successDiv = document.getElementById("successMessage");
 
-            // Clear previous messages
-            if (errorDiv) errorDiv.style.display = 'none';
-            if (successDiv) successDiv.style.display = 'none';
+    loginForm.addEventListener("submit", async function (e) {
 
-            const userId = document.getElementById('loginUserId').value.trim();
-            const password = document.getElementById('loginPassword').value;
+        e.preventDefault();
 
-            try {
-                const response = await fetch('http://localhost:3000/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId, password })
-                });
+        const userId = document.getElementById("loginUserId").value.trim();
+        const password = document.getElementById("loginPassword").value;
 
-                const data = await response.json();
+        errorDiv.style.display = "none";
+        successDiv.style.display = "none";
 
-                if (data.success) {
-                    // 1. Show Success Message
-                    if (successDiv) {
-                        successDiv.textContent = "✅ Login successful! Redirecting...";
-                        successDiv.style.display = 'block';
-                        successDiv.style.color = 'green';
-                    }
+        try {
 
-                    localStorage.setItem('currentUser', JSON.stringify(data.user));
+            const response = await fetch("/api/user/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ userId, password })
+            });
 
-                    // 2. Delay the redirect by 1.5 seconds so you can see the message
-                    setTimeout(() => {
-                        window.location.href = 'newdashboard.html';
-                    }, 1500);
+            const data = await response.json();
 
-                } else {
-                    // Show Invalid Message
-                    if (errorDiv) {
-                        errorDiv.textContent = "❌ " + data.message;
-                        errorDiv.style.display = 'block';
-                        errorDiv.style.color = 'red';
-                    }
-                }
-            } catch (err) {
-                if (errorDiv) {
-                    errorDiv.textContent = "🌐 Server Error: Is node server.js running?";
-                    errorDiv.style.display = 'block';
-                }
+            if (!data.success) {
+                errorDiv.innerText = "❌ " + data.message;
+                errorDiv.style.display = "block";
+                return;
             }
-        });
-    }
+
+            // Save logged user
+            localStorage.setItem("loggedUser", JSON.stringify(data.user));
+
+            successDiv.innerText = "✅ Login successful! Redirecting...";
+            successDiv.style.display = "block";
+
+            setTimeout(() => {
+                window.location.href = "/newdashboard";
+            }, 1000);
+
+        } catch (err) {
+
+            console.error(err);
+            errorDiv.innerText = "Server error. Check backend.";
+            errorDiv.style.display = "block";
+
+        }
+
+    });
+
 });

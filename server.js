@@ -1,11 +1,78 @@
 const express = require('express');
 const path = require('path');
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static("html"));
 const fs = require('fs');
 
-const app = express();
+
+
 app.use(express.static(path.join(__dirname)));
 const PORT = process.env.PORT || 3000;
 const DB_PATH = path.join(__dirname, 'db.json');
+
+
+// ================= USER DASHBOARD =================
+
+app.get('/api/user/dashboard/:userId', (req, res) => {
+
+  const userId = req.params.userId;
+
+  const db = readDb();
+
+  const user = db.users.find(u => u.userId === userId);
+
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found"
+    });
+  }
+
+  const userTickets = db.tickets;
+
+  res.json({
+    user: {
+      userId: user.userId,
+      name: user.name,
+      email: user.email
+    },
+    tickets: userTickets
+  });
+
+});
+// ================= USER LOGIN =================
+
+app.post('/api/user/login', (req, res) => {
+
+  const { userId, password } = req.body;
+
+  const db = readDb();
+
+  const user = db.users.find(
+    u => u.userId === userId && u.password === password
+  );
+
+  if (!user) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid User ID or Password"
+    });
+  }
+
+  res.json({
+    success: true,
+    user: {
+      userId: user.userId,
+      name: user.name,
+      email: user.email
+    }
+  });
+
+});
+
+
 
 // ---------- Middleware ----------
 
@@ -20,7 +87,7 @@ app.use((req, res, next) => {
 });
 
 // Static file serving (CSS, JS, images, icons)
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'bus-tracking')));
 
 // ---------- File handling (fs module) ----------
 
@@ -49,11 +116,13 @@ function writeDb(db) {
 }
 
 // ---------- Page routes (serve HTML) ----------
-
-app.get('/', (req, res, next) => {
-  res.sendFile(path.join(__dirname, 'book-ticket.html'));
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'userlogin.html'));
 });
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'userlogin.html'));
+});
 // Aliases for existing relative links (do not change HTML)
 app.get('/book-ticket', (req, res) => {
   res.sendFile(path.join(__dirname, 'book-ticket.html'));
@@ -64,23 +133,22 @@ app.get('/book-ticket.html', (req, res) => {
 });
 
 app.get('/newdashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'html/PROJECT/newdashboard.html'));
+  res.sendFile(path.join(__dirname, 'newdashboard.html'));
 });
 
 app.get('/busschedule', (req, res) => {
-  res.sendFile(path.join(__dirname, 'html/PROJECT/busschedule.html'));
+  res.sendFile(path.join(__dirname, 'busschedule.html'));
 });
 
 app.get('/reporting', (req, res) => {
-  res.sendFile(path.join(__dirname, 'html/PROJECT/reporting.html'));
+  res.sendFile(path.join(__dirname, 'reporting.html'));
 });
 
 app.get('/review', (req, res) => {
-  res.sendFile(path.join(__dirname, 'html/PROJECT/review.html'));
+  res.sendFile(path.join(__dirname, 'review.html'));
 });
-
 app.get('/book-ticket', (req, res) => {
-  res.sendFile(path.join(__dirname, 'html/PROJECT/book-ticket.html'));
+  res.sendFile(path.join(__dirname, 'book-ticket.html'));
 });
 
 // ---------- API Router (router-level middleware) ----------
