@@ -1,20 +1,55 @@
 const express = require('express');
 const path = require('path');
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static("html"));
+const session = require('express-session');
+const bcrypt = require('bcryptjs');
+const cookieParser = require('cookie-parser');
 const fs = require('fs');
 
+const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-app.use(express.static(path.join(__dirname)));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'html', 'PROJECT'));
+
+app.use(session({
+  secret: 'bus_tracking_secret_key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 3600000 }
+}));
+
+app.use(express.static(path.join(__dirname, "public")));
+app.use('/css', express.static(path.join(__dirname, 'css', 'PROJECT')));
+app.use('/js', express.static(path.join(__dirname, 'js', 'PROJECT')));
+app.use('/html', express.static(path.join(__dirname, 'html', 'PROJECT')));
+
 const PORT = process.env.PORT || 3000;
-const DB_PATH = path.join(__dirname, 'db.json');
+const DB_PATH = path.join(__dirname, 'PROJECT', 'db.json');
+
+app.get('/api/set-preferences', (req, res) => {
+  res.cookie('lastVisit', new Date().toLocaleString(), {
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: true
+  });
+  res.json({ message: "Cookie set successfully! Check the 'Application' tab in Inspect." });
+});
+
+app.get('/api/get-hash', async (req, res) => {
+  const hash = await bcrypt.hash('@Liesha12', 10);
+  res.send(hash);
+});
 
 
-// ================= USER DASHBOARD =================
+app.get('/api/session-user', (req, res) => {
+  if (req.session.isLoggedIn) {
+    res.json({ success: true, user: req.session.user });
+  } else {
+    res.status(401).json({ success: false, message: "No active session" });
+  }
+});
 
 app.get('/api/user/dashboard/:userId', (req, res) => {
 
@@ -42,39 +77,56 @@ app.get('/api/user/dashboard/:userId', (req, res) => {
   });
 
 });
-// ================= USER LOGIN =================
-
-app.post('/api/user/login', (req, res) => {
-
-  const { userId, password } = req.body;
-
-  const db = readDb();
-
-  const user = db.users.find(
-    u => u.userId === userId && u.password === password
-  );
-
-  if (!user) {
-    return res.status(401).json({
-      success: false,
-      message: "Invalid User ID or Password"
-    });
-  }
-
-  res.json({
-    success: true,
-    user: {
-      userId: user.userId,
-      name: user.name,
-      email: user.email
+// User Login
+app.post('/api/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ success: false });
     }
+    res.clearCookie('connect.sid'); // Clears the session cookie
+    res.json({ success: true });
   });
+});
+app.post('/api/user/login', async (req, res) => {
+  const { userId, password } = req.body;
+  const db = readDb();
+  const user = db.users.find(u => u.userId === userId);
 
+  if (!user) return res.status(401).json({ success: false, message: "User not found" });
+
+  // --- FINAL SYNC LOGIC ---
+  const newHash = await bcrypt.hash(password, 10);
+  user.password = newHash;
+
+  // Force the name and email to match your requirements
+  user.name = "Prisha Anand";
+  user.email = "prishaanand1507@gmail.com";
+
+  writeDb(db); // This writes "Prisha Anand" into db.json permanently
+  // ------------------------
+
+  req.session.isLoggedIn = true;
+  req.session.user = {
+    userId: user.userId,
+    name: user.name,
+    email: user.email
+  };
+
+  res.json({ success: true, user: req.session.user });
+});
+app.get('/api/get-hash', async (req, res) => {
+  const hash = await bcrypt.hash('@Liesha12', 10);
+  res.send(hash);
 });
 
-
-
 // ---------- Middleware ----------
+const checkAuth = (req, res, next) => {
+  if (req.session && req.session.isLoggedIn) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
+};
 
 // JSON body parser middleware
 app.use(express.json());
@@ -116,13 +168,7 @@ function writeDb(db) {
 }
 
 // ---------- Page routes (serve HTML) ----------
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'userlogin.html'));
-});
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'userlogin.html'));
-});
 // Aliases for existing relative links (do not change HTML)
 app.get('/book-ticket', (req, res) => {
   res.sendFile(path.join(__dirname, 'book-ticket.html'));
@@ -132,10 +178,18 @@ app.get('/book-ticket.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'book-ticket.html'));
 });
 
-app.get('/newdashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'newdashboard.html'));
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'html', 'PROJECT', 'userlogin.html'));
 });
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'html', 'PROJECT', 'userlogin.html'));
+});
+
+app.get('/newdashboard', checkAuth, (req, res) => {
+
+  res.render('newdashboard', { user: req.session.user });
+});
 app.get('/busschedule', (req, res) => {
   res.sendFile(path.join(__dirname, 'busschedule.html'));
 });

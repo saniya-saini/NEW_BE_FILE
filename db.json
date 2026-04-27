@@ -314,13 +314,13 @@
   "users": [
     {
       "userId": "USR4314",
-      "password": "@Liesha12",
-      "name": "Liesha",
-      "email": "Liesha@gmail.com"
+      "password": "$2b$10$XGs.qF7OcQEorXQ3e.ZnZuS2UShOcUddA/BZYcRG0l5Sl.l.W7Cli",
+      "name": "Prisha Anand",
+      "email": "Prisha1507@gmail.com"
     },
     {
       "userId": "USR1234",
-      "password": "@Prisha12",
+      "password": "$2b$10$76YmPvt9EisM7v10O/8YneNqL9E.D6C.vLwK0E8G2o.Q.eLwK0E8G",
       "name": "Prisha",
       "email": "Prisha1@gmail.com"
     }

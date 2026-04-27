@@ -78,20 +78,7 @@ class APIService {
           location: 'Service Center'
         }
       ],
-      user: {
-        id: 1,
-        name: 'Prisha Anand',
-        email: 'prishaanand1507@gmail.com',
-        phone: '+91 98765 43210',
-        role: 'Admin',
-        location: 'Mumbai Central Station',
-        stats: {
-          busesTracked: 3,
-          reportsHandled: 2,
-          resolved: 1,
-          inProgress: 1
-        }
-      }
+
     };
   }
 
@@ -104,12 +91,11 @@ class APIService {
     await this.delay(200);
     return this.mockData.reports;
   }
-
   async fetchUser() {
-    await this.delay(100);
-    return this.mockData.user;
+    const response = await fetch('/api/session-user'); // ✅ Asks the server
+    const data = await response.json();
+    return data.success ? data.user : null;
   }
-
   async updateBusStatus(busId, status) {
     await this.delay(150);
     const bus = this.mockData.buses.find(b => b.id === busId);
@@ -729,23 +715,28 @@ class AuthManager {
   }
 
   init() {
-
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-      this.currentUser = JSON.parse(savedUser);
-      this.updateUserInterface();
-    } else {
-      this.loadUserData();
-    }
+    this.loadUserData();
   }
 
   async loadUserData() {
     try {
-      this.currentUser = await api.fetchUser();
-      localStorage.setItem('trackbus_user', JSON.stringify(this.currentUser));
-      this.updateUserInterface();
+      // Calling the exact API we added to server.js
+      const response = await fetch('/api/session-user');
+      const data = await response.json();
+
+      if (data.success) {
+        this.currentUser = data.user;
+        // Syncing with your existing UI logic
+        this.updateUserInterface();
+        console.log("✅ Session validated by server.");
+      } else {
+        // If server says no session, kick them out to login
+        console.error('No active session found.');
+        window.location.href = '/login';
+      }
     } catch (error) {
-      console.error('Failed to load user data:', error);
+      console.error('Failed to sync with backend session:', error);
+      window.location.href = '/login';
     }
   }
 
@@ -776,16 +767,21 @@ class AuthManager {
     }
   }
 
-  logout() {
-    localStorage.removeItem('trackbus_user');
-    this.currentUser = null;
-    showNotification('Logged out successfully');
-
-    setTimeout(() => location.reload(), 1000);
+  async logout() {
+    try {
+      // We will create this logout route in server.js next
+      await fetch('/api/logout', { method: 'POST' });
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('trackbus_user');
+      this.currentUser = null;
+      showNotification('Logged out successfully', 'success');
+      setTimeout(() => window.location.href = '/login', 1000);
+    } catch (error) {
+      location.reload(); // Fallback
+    }
   }
-}
 
-const authManager = new AuthManager();
+  const authManager = new AuthManager();
 
 
 class RealTimeManager {

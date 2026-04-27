@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TrackBus Dashboard</title>
-  <link rel="stylesheet" href="../../css/PROJECT/newdashboard.css">
+  <link rel="stylesheet" href="/css/newdashboard.css">
 </head>
 
 <body>
@@ -17,11 +17,11 @@
     </div>
 
     <div class="nav-menu">
-     <a href="/html/PROJECT/newdashboard.html" class="nav-item active"><span>Dashboard</span></a>
-<a href="/html/PROJECT/busschedule.html" class="nav-item"><span>Schedule</span></a>
-<a href="/html/PROJECT/reporting.html" class="nav-item"><span>Report</span></a>
-<a href="/html/PROJECT/review.html" class="nav-item"><span>Review</span></a>
-<a href="/html/PROJECT/book-ticket.html" class="nav-item"><span>Book A Ticket</span></a>
+      <a href="/html/PROJECT/newdashboard.html" class="nav-item active"><span>Dashboard</span></a>
+      <a href="/html/PROJECT/busschedule.html" class="nav-item"><span>Schedule</span></a>
+      <a href="/html/PROJECT/reporting.html" class="nav-item"><span>Report</span></a>
+      <a href="/html/PROJECT/review.html" class="nav-item"><span>Review</span></a>
+      <a href="/html/PROJECT/book-ticket.html" class="nav-item"><span>Book A Ticket</span></a>
     </div>
 
     <div class="sign-out">
@@ -40,7 +40,7 @@
     <div class="welcome-banner">
       <div class="welcome-content">
         <div class="welcome-text">
-          <h1>Welcome back!</h1>
+          <h1>Welcome back, <%= user.name %>!</h1>
           <p>Here's your bus tracking and safety overview for today</p>
         </div>
         <div class="welcome-stats">
@@ -128,7 +128,8 @@
         U
       </div>
       <div class="profile-name" id="dropdownFullName" style="text-align: center; font-weight: bold; margin-top: 10px;">
-        Loading Name...</div>
+        <%= user.name %>
+      </div>
       <div class="profile-role" id="dropdownUserId" style="text-align: center; color: gray; font-size: 12px;">Loading
         ID...
       </div>
@@ -148,7 +149,9 @@
     <div class="contact-details">
       <div class="info-box">
         <label>Email:</label>
-        <span id="userEmailDisplay">Loading Email...</span>
+        <span id="userEmailDisplay">
+          <%= user.email %>
+        </span>
       </div>
       <div class="info-box">
         <label>Phone:</label>
@@ -166,29 +169,21 @@
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
-  <script src="../../js/PROJECT/auth.js"></script>
-  <script src="../../js/PROJECT/newdashboard.js"></script>
-
+  <script src="/js/auth.js"></script>
+  <script src="/js/newdashboard.js"></script>
   <script>
-    function forceUpdateSidebar() {
-      const storedUser = localStorage.getItem('currentUser') || localStorage.getItem('trackbus_user');
-      if (storedUser) {
-        const user = JSON.parse(storedUser);
-        if (document.getElementById('dropdownFullName')) document.getElementById('dropdownFullName').textContent = user.name || user.fullName;
-        if (document.getElementById('dropdownUserId')) document.getElementById('dropdownUserId').textContent = user.userId || user.id || "User";
-        if (document.getElementById('userEmailDisplay')) document.getElementById('userEmailDisplay').textContent = user.email;
-        if (document.getElementById('userPhoneDisplay')) document.getElementById('userPhoneDisplay').textContent = user.phone || "N/A";
-        if (document.getElementById('userAvatar')) {
-          const initial = (user.name || "U").charAt(0).toUpperCase();
-          document.getElementById('userAvatar').textContent = initial;
-        }
-        console.log("Sidebar data forced from local storage.");
+    function toggleSidebar() {
+      const sidebar = document.getElementById('rightSidebar');
+      const mainContent = document.getElementById('mainContent');
+
+      if (sidebar && mainContent) {
+        sidebar.classList.toggle('open');
+        mainContent.classList.toggle('sidebar-open');
+        console.log("Sidebar toggled!");
+      } else {
+        console.error("Sidebar or MainContent elements not found in HTML");
       }
     }
-    // Runs when window loads
-    window.addEventListener('load', forceUpdateSidebar);
-    // Runs a second time after 500ms just in case newdashboard.js overwrote it
-    setTimeout(forceUpdateSidebar, 500);
   </script>
 </body>
 
