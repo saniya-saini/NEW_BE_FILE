@@ -1,3 +1,34 @@
+let socket;
+try {
+  socket = io();
+} catch(e) {
+  console.warn('Socket.io not available');
+}
+
+if (socket) {
+  socket.on('highSeverityAlert', function(data) {
+    console.warn('🚨 REAL-TIME ALERT:', data.message);
+    
+    const alertDiv = document.createElement('div');
+    alertDiv.style.cssText = `
+        position: fixed; top: 20px; right: 20px; z-index: 9999;
+        background: #fee2e2; border: 2px solid #ef4444;
+        border-radius: 12px; padding: 20px; max-width: 350px;
+        box-shadow: 0 8px 25px rgba(239,68,68,0.3);
+    `;
+    alertDiv.innerHTML = `
+        <strong style="color:#991b1b">🚨 High Severity Alert!</strong><br>
+        <span style="color:#7f1d1d; font-size:14px">${data.message}</span>
+        <button onclick="this.parentElement.remove()" 
+                style="display:block; margin-top:10px; padding:5px 15px;
+                       background:#ef4444; color:white; border:none; 
+                       border-radius:6px; cursor:pointer">Dismiss</button>
+    `;
+    document.body.appendChild(alertDiv);
+    setTimeout(() => alertDiv?.remove(), 10000);
+  });
+}
+
 const themeToggle = document.getElementById('themeToggle');
 const body = document.body;
 const toggleIcon = document.querySelector('.toggle-icon');
@@ -239,7 +270,7 @@ function displayReports(reports) {
         <p><strong>Description:</strong> ${report.description}</p>
         <p><strong>Rating:</strong> ${report.rating}/5</p>
       </div>
-      <button class="delete-btn" data-id="${report.id}">Delete</button>
+      <button class="delete-btn" data-id="${report._id}">Delete</button>
     </div>
   `).join('');
 }

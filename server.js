@@ -9,7 +9,22 @@ const cookieParser = require('cookie-parser');
 const fs = require('fs');
 const User = require('./models/User');
 
+const jwt = require('jsonwebtoken');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
+const Report = require('./models/Report');
+const JWT_SECRET = process.env.JWT_SECRET || 'trackbus_jwt_secret_2025';
+
 const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, { cors: { origin: "*" } });
+app.set('io', io);
+io.on('connection', (socket) => {
+    console.log('🔌 Socket connected:', socket.id);
+    socket.on('disconnect', () => {
+        console.log('🔌 Socket disconnected:', socket.id);
+    });
+});
 const PORT = 3000;
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("🚀 MONGODB ATLAS: CONNECTION ESTABLISHED"))
@@ -28,10 +43,18 @@ app.use(session({
   saveUninitialized: false,
   cookie: { maxAge: 3600000 }
 }));
+app.use((req, res, next) => {
+  const time = new Date().toLocaleTimeString();
+  console.log(`[${time}] ${req.method} request to: ${req.url}`);
+  next(); 
+});
 
 app.use(express.static(path.join(__dirname)));
 app.use('/css', express.static(path.join(__dirname, 'css', 'PROJECT')));
 app.use('/js', express.static(path.join(__dirname, 'js', 'PROJECT')));
+
+const reportRoutes = require('./routes/reportRoutes');
+app.use('/reports', reportRoutes);
 
 const checkAuth = (req, res, next) => {
   if (req.session && req.session.isLoggedIn) {
@@ -40,6 +63,11 @@ const checkAuth = (req, res, next) => {
     res.redirect('/login');
   }
 };
+
+app.use((req, res, next) => {
+  console.log(`[${new Date().toLocaleString()}] ${req.method} request to ${req.url}`);
+  next();
+});
 
 const getProjectData = async (req) => {
   try {
@@ -74,6 +102,12 @@ app.post('/api/user/login', async (req, res) => {
     if (isMatch) {
       req.session.isLoggedIn = true;
       req.session.user = { userId: user.userId, name: user.name, email: user.email };
+      const token = jwt.sign(
+        { userId: user.userId, name: user.name },
+        JWT_SECRET,
+        { expiresIn: '1h' }
+      );
+      res.cookie('jwtToken', token, { httpOnly: true, maxAge: 3600000 });
       res.json({ success: true, user: req.session.user });
     } else {
       res.status(401).json({ success: false, message: "Invalid Password" });
@@ -84,11 +118,19 @@ app.post('/api/user/login', async (req, res) => {
 });
 app.get('/newdashboard', checkAuth, async (req, res) => {
   const projectData = await getProjectData(req);
+  
+  res.cookie('last_visit', new Date().toLocaleTimeString(), { 
+    maxAge: 900000, 
+    httpOnly: true 
+  });
+  
   res.render('newdashboard', { user: projectData.user });
 });
+
 app.post('/api/logout', (req, res) => {
   req.session.destroy(() => {
-    res.clearCookie('connect.sid');
+    res.clearCookie('connect.sid'); 
+    res.clearCookie('last_visit');  
     res.json({ success: true });
   });
 });
