@@ -1,3 +1,4 @@
+const Bus = require('./models/Bus');
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -9,6 +10,7 @@ const fs = require('fs');
 const User = require('./models/User');
 
 const app = express();
+const PORT = 3000;
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("🚀 MONGODB ATLAS: CONNECTION ESTABLISHED"))
   .catch(err => console.error("❌ MongoDB Connection Error: ", err));
@@ -58,6 +60,9 @@ app.get('/', (req, res) => res.redirect('/login'));
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'html', 'PROJECT', 'userlogin.html'));
 });
+app.get('/busschedule', (req, res) => {
+  res.render('busschedule');
+});
 app.post('/api/user/login', async (req, res) => {
   try {
     const { userId, password } = req.body;
@@ -91,9 +96,141 @@ app.get('/api/cities', (req, res) => res.json([]));
 app.get('/api/routes', (req, res) => res.json([]));
 app.get('/api/reviews', (req, res) => res.json([]));
 
-app.use((req, res) => res.status(404).send('404 - Page Not Found'));
 
-const PORT = process.env.PORT || 3000;
+//BUS SCHEDULE API
+
+function isNonEmptyString(value) {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function validateBusSchedule(input) {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) {
+    return { ok: false, message: 'Bus schedule must be a JSON object.' };
+  }
+
+  const requiredFields = [
+    'route',
+    'origin',
+    'destination',
+    'departure',
+    'arrival',
+    'duration',
+    'location',
+    'operator',
+    'status'
+  ];
+
+  for (const field of requiredFields) {
+    if (!isNonEmptyString(input[field])) {
+      return { ok: false, message: `Missing or invalid field: ${field}` };
+    }
+  }
+
+  const allowedStatuses = new Set(['on-time', 'delayed', 'boarding']);
+  if (!allowedStatuses.has(String(input.status).toLowerCase())) {
+    return {
+      ok: false,
+      message: 'Invalid status. Allowed: on-time, delayed, boarding.'
+    };
+  }
+
+  return { ok: true };
+}
+
+function getNextBusScheduleId(list) {
+  const max = list.reduce((acc, item) => {
+    const n = parseInt(String(item && item.id), 10);
+    return Number.isFinite(n) ? Math.max(acc, n) : acc;
+  }, 0);
+  return String(max + 1);
+}
+
+const busRouter = express.Router();
+
+busRouter.use((req, res, next) => {
+  console.log('  -> Bus API request:', req.method, req.path);
+  next();
+});
+
+// GET /api/busschedules – all schedules
+busRouter.get('/', async (req, res) => {
+  try {
+    const { origin, destination, operator } = req.query;
+
+    let query = {};
+
+    if (origin) query.origin = new RegExp(origin, 'i');
+    if (destination) query.destination = new RegExp(destination, 'i');
+    if (operator) query.operator = new RegExp(operator, 'i');
+
+    const buses = await Bus.find(query);
+
+    res.json(buses);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching buses');
+  }
+});
+// GET /api/busschedules/:id – single schedule by id
+app.get('/api/busschedules', async (req, res) => {
+  const { origin, destination, operator } = req.query;
+
+  let query = {};
+
+  if (origin) query.origin = new RegExp(origin, 'i');
+  if (destination) query.destination = new RegExp(destination, 'i');
+  if (operator) query.operator = new RegExp(operator, 'i');
+
+  const buses = await Bus.find(query);
+  res.json(buses);
+});
+
+// POST /api/busschedules – add new schedule
+busRouter.post('/', async (req, res) => {
+  try {
+    const newBus = new Bus(req.body);
+    await newBus.save();
+    res.status(201).json(newBus);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error adding bus');
+  }
+});
+
+//Patch /api/busschedules/:id – update bus status
+busRouter.patch('/:id', async (req, res) => {
+  try {
+    const updated = await Bus.findByIdAndUpdate(
+      req.params.id,
+      { status: req.body.status },
+      { new: true }
+    );
+
+    res.json(updated);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error updating bus');
+  }
+});
+
+
+app.use('/api/busschedules', busRouter);
+
+// ---------- 404 handler ----------
+
+app.use((req, res, next) => {
+  res.status(404).send('404 - Page Not Found');
+});
+
+// ---------- Error handling middleware ----------
+
+app.use((err, req, res, next) => {
+  console.error('Server error:', err);
+  res.status(500).send('500 - Internal Server Error');
+});
+
+// ---------- Start server ----------
+
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running at http://localhost:${PORT}`);
+  console.log(`Server is running at http://localhost:${PORT}`);
 });

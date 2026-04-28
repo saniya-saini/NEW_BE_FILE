@@ -1,5 +1,4 @@
-
-    let allBuses = [];
+let allBuses = [];
     let filteredBuses = [];
 
     async function loadBusData() {
@@ -12,7 +11,7 @@
         }
         
         const data = await response.json();
-        allBuses = Array.isArray(data) ? data : (data?.busschedules || data?.buses || []);
+        allBuses = data.busschedules || data;
         filteredBuses = [...allBuses];
         
         console.log(`✅ Loaded ${allBuses.length} buses from JSON`);
@@ -137,41 +136,21 @@
     }
 
     
-    function applyFilters() {
-      const timeFilter = document.getElementById('timeFilter').value;
-      const operatorFilter = document.getElementById('operatorFilter').value;
-      const originFilter = document.getElementById('originFilter').value.toLowerCase();
-      const destinationFilter = document.getElementById('destinationFilter').value.toLowerCase();
+   async function applyFilters() {
+  const origin = document.getElementById('originFilter').value;
+  const destination = document.getElementById('destinationFilter').value;
+  const operator = document.getElementById('operatorFilter').value;
 
-      filteredBuses = allBuses.filter(bus => {
-        let match = true;
+  let url = '/api/busschedules';
 
-        if (timeFilter && bus.departure < timeFilter) {
-          match = false;
-        }
+  if (origin || destination || operator) {
+    url += `?origin=${origin}&destination=${destination}&operator=${operator}`;
+  }
 
-        if (operatorFilter) {
-          if (operatorFilter === 'Private') {
-            match = match && bus.operator.includes('Private');
-          } else {
-            match = match && bus.operator === operatorFilter;
-          }
-        }
-
-        if (originFilter) {
-          match = match && bus.origin.toLowerCase().includes(originFilter);
-        }
-
-        if (destinationFilter) {
-          match = match && bus.destination.toLowerCase().includes(destinationFilter);
-        }
-
-        return match;
-      });
-
-      renderBusList(filteredBuses);
-    }
-
+  const response = await fetch(url);
+  const data = await response.json();
+renderBusList(data.busschedules || data);
+   }
  
     function clearFilters() {
       document.getElementById('timeFilter').value = '';
