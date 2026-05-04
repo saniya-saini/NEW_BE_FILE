@@ -1,4 +1,3 @@
-
 let sidebarOpen = false;
 let searchOpen = false;
 let darkMode = false;
@@ -664,7 +663,32 @@ class LiveTrackingAPI {
 }
 
 const liveTrackingAPI = new LiveTrackingAPI();
+// --- Logout Logic ---
+async function handleLogout() {
+    // 1. Confirm with the user
+    if (!confirm("Are you sure you want to log out?")) return;
 
+    try {
+        // 2. Tell the server to destroy the session
+        const response = await fetch('/api/logout', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const data = await response.json();
+
+        // 3. If successful, clear local state and redirect
+        if (data.success) {
+            console.log("Logout successful, redirecting...");
+            window.location.href = '/login';
+        } else {
+            alert("Logout failed: " + (data.message || "Unknown error"));
+        }
+    } catch (error) {
+        console.error("Error during logout:", error);
+        alert("An error occurred while trying to log out.");
+    }
+}
 
 window.resetMapView = function () {
   if (liveTrackingAPI.mapInstance) {
@@ -780,7 +804,7 @@ class AuthManager {
       location.reload(); // Fallback
     }
   }
-
+}
   const authManager = new AuthManager();
 
 

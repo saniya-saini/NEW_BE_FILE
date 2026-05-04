@@ -383,7 +383,36 @@
     .buses-icon {
       background: #bee3f8;
     }
+.sign-out {
+    padding: 20px;
+    margin-top: auto; 
+}
 
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.logout-btn:hover {
+    background: #ef4444; /* Red color for logout */
+    border-color: #ef4444;
+    color: white;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.logout-btn .icon {
+    font-size: 18px;
+}
     .reports-icon {
       background: #feebc8;
     }
