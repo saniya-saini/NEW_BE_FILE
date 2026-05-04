@@ -56,13 +56,12 @@ app.use('/js', express.static(path.join(__dirname, 'js/PROJECT')));
 app.use('/css', express.static(path.join(__dirname, 'css/PROJECT')));
 // ─── AUTH MIDDLEWARE ─────────────────────────────────────────────────────────
 const checkAuth = (req, res, next) => {
-  if (req.session && req.session.isLoggedIn) {
+  if (req.session && req.session.user && req.session.isLoggedIn) {
     next();
   } else {
     res.redirect('/login');
   }
 };
-
 // ─── ROUTE IMPORTS ───────────────────────────────────────────────────────────
 const reportRoutes = require('./routes/reportRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');  // NEW
@@ -75,14 +74,19 @@ app.use('/reviews', reviewRoutes);        // NEW: /reviews GET/POST/DELETE
 // ─── HELPER ──────────────────────────────────────────────────────────────────
 const getProjectData = async (req) => {
   try {
-    const user = await User.findOne({ userId: req.session.user.userId });
+    // ✅ SAFE CHECK
+    if (!req.session || !req.session.user) {
+      return { user: null, reviews: [], cities: [], routes: [] };
+    }
+
+    const user = await User.findOne({ userId: req.session?.user?.userId });
+
     return { user, reviews: [], cities: [], routes: [] };
   } catch (err) {
     console.error("Error fetching data from Atlas:", err);
     return { user: null, reviews: [], cities: [], routes: [] };
   }
 };
-
 // ─── PAGE ROUTES ─────────────────────────────────────────────────────────────
 app.get('/', (req, res) => res.redirect('/login'));
 
@@ -149,7 +153,7 @@ app.get('/api/user/get-cookie-preference', async (req, res) => {
             return res.json({ preference: 'undecided' });
         }
 
-        const user = await User.findOne({ userId: req.session.user.userId });
+        const user = await User.findOne({ userId: req.session?.user?.userId });
         
         if (!user) {
             return res.json({ preference: 'undecided' });
@@ -229,11 +233,23 @@ busRouter.use((req, res, next) => {
 
 busRouter.get('/', async (req, res) => {
   try {
-    const { origin, destination, operator } = req.query;
-    let query = {};
-    if (origin) query.origin = new RegExp(origin, 'i');
-    if (destination) query.destination = new RegExp(destination, 'i');
-    if (operator) query.operator = new RegExp(operator, 'i');
+   
+   const { origin = '', destination = '', operator = '' } = req.query;
+
+let query = {};
+
+if (origin && typeof origin === 'string') {
+  query.origin = { $regex: origin, $options: 'i' };
+}
+
+if (destination && typeof destination === 'string') {
+  query.destination = { $regex: destination, $options: 'i' };
+}
+
+if (operator && typeof operator === 'string') {
+  query.operator = { $regex: operator, $options: 'i' };
+}
+
     const buses = await Bus.find(query);
     res.json(buses);
   } catch (err) {
@@ -242,27 +258,29 @@ busRouter.get('/', async (req, res) => {
   }
 });
 
-app.get('/api/busschedules', async (req, res) => {
-  const { origin, destination, operator } = req.query;
-  let query = {};
-  if (origin) query.origin = new RegExp(origin, 'i');
-  if (destination) query.destination = new RegExp(destination, 'i');
-  if (operator) query.operator = new RegExp(operator, 'i');
-  const buses = await Bus.find(query);
-  res.json(buses);
-});
+
 app.get('/businfo', async (req, res) => {
-  const busId = req.query.busId;
+  try {
+    const busId = req.query.busId;
 
-  const bus = await Bus.findOne({
-    route: { $regex: busId, $options: 'i' }
-  });
+    // ✅ SAFE CHECK
+    if (!busId || typeof busId !== 'string') {
+      return res.status(400).json({ error: 'Invalid busId' });
+    }
 
-  if (!bus) {
-    return res.status(404).json({ error: 'Bus not found' });
+    const bus = await Bus.findOne({
+      route: { $regex: busId, $options: 'i' }
+    });
+
+    if (!bus) {
+      return res.status(404).json({ error: 'Bus not found' });
+    }
+
+    res.json(bus);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching bus');
   }
-
-  res.json(bus);
 });
 busRouter.post('/', async (req, res) => {
   try {
