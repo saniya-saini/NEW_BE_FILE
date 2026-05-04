@@ -233,6 +233,24 @@ renderBusList(data.busschedules || data);
       loadBusData();
     });
 
+    async function handleLogout() {
+    if (!confirm("Are you sure you want to log out?")) return;
+    try {
+        const response = await fetch('/api/logout', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await response.json();
+        if (data.success) {
+            window.location.href = '/login';
+        } else {
+            alert("Logout failed: " + (data.message || "Unknown error"));
+        }
+    } catch (error) {
+        alert("An error occurred while trying to log out.");
+    }
+}
+
     function selectSearchResult(route) {
       closeSearch();
       
