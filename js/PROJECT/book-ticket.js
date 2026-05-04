@@ -1,6 +1,27 @@
 
 const API_BASE_URL = 'http://localhost:3000'; 
 
+async function handleLogout() {
+    if (!confirm("Are you sure you want to log out?")) return;
+
+    try {
+        const response = await fetch('/api/logout', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const data = await response.json();
+
+        if (data.success) {
+            window.location.href = '/login';
+        } else {
+            alert("Logout failed: " + (data.message || "Unknown error"));
+        }
+    } catch (error) {
+        console.error("Error during logout:", error);
+        alert("An error occurred while trying to log out.");
+    }
+}
 
 let busData = {
     cities: [],

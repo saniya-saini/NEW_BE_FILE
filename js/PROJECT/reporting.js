@@ -1,298 +1,81 @@
-let socket;
-try {
-  socket = io();
-} catch(e) {
-  console.warn('Socket.io not available');
-}
-
-if (socket) {
-  socket.on('highSeverityAlert', function(data) {
-    console.warn('🚨 REAL-TIME ALERT:', data.message);
-    
-    const alertDiv = document.createElement('div');
-    alertDiv.style.cssText = `
-        position: fixed; top: 20px; right: 20px; z-index: 9999;
-        background: #fee2e2; border: 2px solid #ef4444;
-        border-radius: 12px; padding: 20px; max-width: 350px;
-        box-shadow: 0 8px 25px rgba(239,68,68,0.3);
-    `;
-    alertDiv.innerHTML = `
-        <strong style="color:#991b1b">🚨 High Severity Alert!</strong><br>
-        <span style="color:#7f1d1d; font-size:14px">${data.message}</span>
-        <button onclick="this.parentElement.remove()" 
-                style="display:block; margin-top:10px; padding:5px 15px;
-                       background:#ef4444; color:white; border:none; 
-                       border-radius:6px; cursor:pointer">Dismiss</button>
-    `;
-    document.body.appendChild(alertDiv);
-    setTimeout(() => alertDiv?.remove(), 10000);
-  });
-}
-
-const themeToggle = document.getElementById('themeToggle');
-const body = document.body;
-const toggleIcon = document.querySelector('.toggle-icon');
-
-const currentTheme = localStorage.getItem('theme') || 'light';
-if (currentTheme === 'dark') {
-  body.classList.add('dark-mode');
-  if (toggleIcon) toggleIcon.textContent = '☀';
-}
-
-if (themeToggle) {
-  themeToggle.addEventListener('click', function() {
-    body.classList.toggle('dark-mode');
-
-    if (body.classList.contains('dark-mode')) {
-      if (toggleIcon) toggleIcon.textContent = '☀';
-      localStorage.setItem('theme', 'dark');
-    } else {
-      if (toggleIcon) toggleIcon.textContent = '🌙';
-      localStorage.setItem('theme', 'light');
+        async function handleLogout() {
+            if (!confirm("Are you sure you want to log out?")) return;
+            try {
+                const response = await fetch('/api/logout', { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await response.json();
+            if (data.success) {
+                window.location.href = '/login';
+            } else {
+                alert("Logout failed: " + (data.message || "Unknown error"));
+            }
+        } catch (error) {
+            alert("An error occurred while trying to log out.");
+        }
     }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
 
-    if (toggleIcon) {
-      toggleIcon.style.transform = 'rotate(360deg)';
-      setTimeout(() => {
-        toggleIcon.style.transform = 'rotate(0deg)';
-      }, 300);
-    }
-  });
-}
+            const reviewForm = document.querySelector('.review-form');
+            if (reviewForm) {
+                reviewForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Your review has been submitted successfully!');
+                    this.reset();
+                });
+            }
+            const loadMoreBtn = document.querySelector('.load-more-btn');
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', function() {
+                    alert('Loading more reviews...');
+                });
+            }
+            const ratingLabels = document.querySelectorAll('.review-rating label');
+            if (ratingLabels.length > 0) {
+                ratingLabels.forEach((label, index) => {
+                    label.addEventListener('click', function() {
+                        ratingLabels.forEach(l => l.classList.remove('selected'));
+                        for (let i = 0; i <= index; i++) {
+                            ratingLabels[i].classList.add('selected');
+                        }
+                        const input = document.getElementById(`star${index + 1}`);
+                        if (input) {
+                            input.checked = true;
+                        }
+                    });
+                });
+            }
 
-document.querySelector('.emergency-btn')?.addEventListener('click', function() {
-    document.getElementById('confirmModal').style.display = 'block';
-  });
+            const userProfileIcon = document.querySelector('.user-profile-icon');
+            const rightSidebar = document.getElementById('rightSidebar');
+            const closeSidebar = document.getElementById('closeSidebar');
 
-  function closeConfirmModal() {
-    document.getElementById('confirmModal').style.display = 'none';
-  }
+            if (userProfileIcon && rightSidebar) {
+                userProfileIcon.addEventListener('click', function() {
+                    rightSidebar.classList.add('open');
+                });
+            }
 
-  function sendEmergencyAlert() {
-    closeConfirmModal();
+            if (closeSidebar && rightSidebar) {
+                closeSidebar.addEventListener('click', function() {
+                    rightSidebar.classList.remove('open');
+                });
+            }
 
-    document.getElementById('successModal').style.display = 'block';
-  }
-
-  function closeSuccessModal() {
-    document.getElementById('successModal').style.display = 'none';
-  }
-
-  window.addEventListener('click', function(event) {
-    const confirmModal = document.getElementById('confirmModal');
-    const successModal = document.getElementById('successModal');
-    
-    if (event.target === confirmModal) {
-      closeConfirmModal();
-    }
-    if (event.target === successModal) {
-      closeSuccessModal();
-    }
-  });
-
-let selectedReportType = null;
-
-const reportOptions = document.querySelectorAll('.report-option');
-reportOptions.forEach(function(option) {
-  option.addEventListener('click', function() {
-
-    reportOptions.forEach(function(opt) {
-      opt.classList.remove('selected');
-    });
-
-    this.classList.add('selected');
-
-    selectedReportType = this.querySelector('h3').textContent;
-    
-    console.log('Selected Report Type:', selectedReportType);
-  });
-});
-
-function validateBusNumber(busNumber) { 
-  const pattern = /^[A-Z]{2}-\d{2}-[A-Z]{1,2}-\d{4}$/;
-  return pattern.test(busNumber);
-}
-
-const busNumberInput = document.getElementById('busNumber');
-const busNumberError = document.getElementById('busNumberError');
-
-busNumberInput.addEventListener('input', function() {
-  const value = this.value.trim().toUpperCase();
-  this.value = value;
-
-  if (value === '') {
-    busNumberInput.classList.remove('invalid', 'valid');
-    busNumberError.classList.remove('show');
-    busNumberError.textContent = '';
-    return;
-  }
-
-  if (validateBusNumber(value)) {
-    busNumberInput.classList.remove('invalid');
-    busNumberInput.classList.add('valid');
-    busNumberError.classList.remove('show');
-    busNumberError.textContent = '';
-  } else {
-    busNumberInput.classList.remove('valid');
-    busNumberInput.classList.add('invalid');
-    busNumberError.classList.add('show');
-    busNumberError.textContent = 'Invalid format!';
-  }
-});
-
-document.querySelector('form')?.addEventListener('submit', async function(e) {
-  e.preventDefault();
-  
-  if (!selectedReportType) {
-    showMessage('Please select a report type first!', 'error');
-    return;
-  }
-
-  const busNumber = document.getElementById('busNumber').value;
-  if (!validateBusNumber(busNumber)) {
-    showMessage('Please enter a valid bus number format', 'error');
-    busNumberInput.focus();
-    return;
-  }
-
-  const formData = {
-    reportType: selectedReportType,
-    busNumber: busNumber,
-    location: document.querySelectorAll('input[type="text"]')[1].value,
-    date: document.querySelector('input[type="date"]').value,
-    time: document.querySelector('input[type="time"]').value,
-    description: document.querySelector('textarea').value,
-    severity: document.querySelector('input[name="severity"]:checked')?.id || 'Not specified',
-    rating: document.querySelector('input[name="rating"]:checked')?.value || 'Not rated',
-  };
-
-  if (!formData.busNumber || !formData.location || 
-      !formData.date || !formData.time || !formData.description) {
-    showMessage('Please fill all required fields!', 'error');
-    return;
-  }
-  try {
-    const response = await fetch('http://localhost:3000/reports', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    });
-    
-    const data = await response.json();
-    
-    console.log('Report saved:', data);
-    showMessage('✓ Report submitted successfully!', 'success');
-
-    document.querySelector('form').reset();
-    selectedReportType = null;
-    document.querySelectorAll('.report-option').forEach(opt => opt.classList.remove('selected'));
-
-    await loadReports();
-  } catch (error) {
-    console.error('Error:', error);
-    showMessage('Failed to submit report. Please try again.', 'error');
-  }
-});
-
-function showMessage(text, type) {
-  const existingMessage = document.querySelector('.form-message');
-  if (existingMessage) {
-    existingMessage.remove();
-  }
-
-  const messageDiv = document.createElement('div');
-  messageDiv.className = 'form-message ' + type;
-  messageDiv.innerText = text;
-
-  const submitBtn = document.querySelector('.submit-btn');
-  submitBtn.parentNode.insertBefore(messageDiv, submitBtn.nextSibling);
-
-  setTimeout(function() {
-    if (messageDiv.parentNode) {
-      messageDiv.remove();
-    }
-  },8000);
-}
-
-function saveToLocalStorage(data) {
-  let reports = JSON.parse(localStorage.getItem('busReports')) || [];
-
-  reports.push(data);
-
-  localStorage.setItem('busReports', JSON.stringify(reports));
-  
-  console.log('Total reports saved:', reports.length);
-}
-
-const severityRadios = document.querySelectorAll('input[name="severity"]');
-
-severityRadios.forEach(function(radio) {
-  radio.addEventListener('change', function() {
-    const selectedSeverity = this.id;
-    const formSection = document.querySelector('.form-section');
-
-    formSection.classList.remove('severity-low', 'severity-medium', 'severity-high');
-
-  });
-});
-
-async function loadReports() {
-  try {
-    const response = await fetch('http://localhost:3000/reports');
-    const reports = await response.json();
-    displayReports(reports);
-  } catch (error) {
-    console.error('Error loading reports:', error);
-  }
-}
-
-function displayReports(reports) {
-  const container = document.getElementById('reportsContainer');
-  if (!container) return;
-  
-  if (reports.length === 0) {
-    container.innerHTML = '<p style="text-align: center; color: #999;">No reports yet.</p>';
-    return;
-  }
-  
-  container.innerHTML = reports.map(report => `
-    <div class="report-card">
-      <div class="report-header">
-        <span class="report-type">${report.reportType}</span>
-        <span class="report-severity severity-${report.severity}">${report.severity}</span>
-      </div>
-      <div class="report-body">
-        <p><strong>Bus:</strong> ${report.busNumber}</p>
-        <p><strong>Location:</strong> ${report.location}</p>
-        <p><strong>Date:</strong> ${report.date} at ${report.time}</p>
-        <p><strong>Description:</strong> ${report.description}</p>
-        <p><strong>Rating:</strong> ${report.rating}/5</p>
-      </div>
-      <button class="delete-btn" data-id="${report._id}">Delete</button>
-    </div>
-  `).join('');
-}
-
-async function deleteReport(id) {
-  if (!confirm('Are you sure you want to delete this report?')) return;
-  try {
-    await fetch(`http://localhost:3000/reports/${id}`, { method: 'DELETE' });
-    showMessage('✓ Report deleted successfully!', 'success');
-    await loadReports();
-  } catch (error) {
-    console.error('Error:', error);
-    showMessage('Failed to delete report.', 'error');
-  }
-}
-
-
-document.addEventListener('click', function(e) {
-  if (e.target.classList.contains('delete-btn')) {
-    const reportId = e.target.getAttribute('data-id');
-    deleteReport(reportId);
-  }
-});
-
-window.addEventListener('DOMContentLoaded', loadReports);
+            document.addEventListener('click', function(e) {
+                if (rightSidebar && rightSidebar.classList.contains('open') &&
+                    !rightSidebar.contains(e.target) &&
+                    !userProfileIcon.contains(e.target)) {
+                    rightSidebar.classList.remove('open');
+                }
+            });
+        });

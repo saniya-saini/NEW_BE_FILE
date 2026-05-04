@@ -8,26 +8,30 @@
 </head>
 <body>
 
-    <div class="sidebar">
+  <div class="sidebar">
     <div class="logo-section">
       <div class="logo">
-        <span>TrackBus</span>
+        <span style="margin-top: 19px;">TrackBus</span>
       </div>
     </div>
 
     <div class="nav-menu">
-      <a href="/html/PROJECT/newdashboard.html" class="nav-item"><span>Dashboard</span></a>
-      <a href="/busschedule" class="nav-item"><span>Schedule</span></a>
-      <a href="/html/PROJECT/reporting.html" class="nav-item active"><span>Report</span></a>
-      <a href="/html/PROJECT/review.html" class="nav-item"><span>Review</span></a>
-      <a href="/html/PROJECT/book-ticket.html" class="nav-item"><span>Book A Ticket</span></a>
+        <a href="/newdashboard" class="nav-item"><span>Dashboard</span></a>
+        <a href="/busschedule" class="nav-item"><span>Schedule</span></a>
+        <a href="/html/PROJECT/reporting.html" class="nav-item active"><span>Report</span></a>
+        <a href="/html/PROJECT/review.html" class="nav-item"><span>Review</span></a>
+        <a href="/html/PROJECT/book-ticket.html" class="nav-item"><span>Book A Ticket</span></a>
     </div>
 
     <div class="sign-out">
-      <div class="nav-icon">↪</div>
-      <span>Sign out</span>
+      <button class="logout-btn" onclick="handleLogout()">
+        <span class="icon">↪</span>
+        <span class="text">Sign out</span>
+      </button>
     </div>
   </div>
+
+
   <div class="main-content">
     <div class="header">
       <h1>Safety Reporting</h1>
