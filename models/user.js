@@ -26,7 +26,12 @@ const userSchema = new mongoose.Schema({
     stats: {
         busesTracked: { type: Number, default: 0 },
         reportsHandled: { type: Number, default: 0 }
-    }
+    },
+cookieConsent: {
+    type: String,
+    enum: ['accepted', 'rejected', 'undecided'],
+    default: 'undecided'
+}
 }, { timestamps: true }); // This automatically adds 'createdAt' and 'updatedAt'
 
 // We compile the Schema into a Model and export it

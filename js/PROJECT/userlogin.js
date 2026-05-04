@@ -16,14 +16,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
 
-            const response = await fetch("/api/user/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ userId, password })
-            });
-
+           const response = await fetch("/api/user/login", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ 
+        userId, 
+        password,
+        cookiesAccepted: localStorage.getItem('cookieConsent')
+    })
+});
             const data = await response.json();
 
             if (!data.success) {

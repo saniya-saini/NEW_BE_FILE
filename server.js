@@ -98,25 +98,43 @@ app.get('/userdashboard', (req, res) => {
   res.sendFile(path.join(__dirname, 'html', 'PROJECT', 'userdashboard.html'));
 });
 // ─── AUTH API ────────────────────────────────────────────────────────────────
+
 app.post('/api/user/login', async (req, res) => {
   try {
-    const { userId, password } = req.body;
+    const { userId, password, cookiesAccepted } = req.body; 
     const user = await User.findOne({ userId });
 
     if (!user) return res.status(404).json({ success: false, message: "User not found" });
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
-      req.session.isLoggedIn = true;
-      req.session.user = { userId: user.userId, name: user.name, email: user.email };
+      if (cookiesAccepted === true || cookiesAccepted === 'true') {
+        user.cookieConsent = 'accepted';
+      } else if (cookiesAccepted === false || cookiesAccepted === 'false') {
+        user.cookieConsent = 'rejected';
+      }
+      await user.save();
 
-      // JWT Token
+      req.session.isLoggedIn = true;
+      req.session.user = { 
+        userId: user.userId, 
+        name: user.name, 
+        email: user.email,
+        cookieConsent: user.cookieConsent 
+      };
+
       const token = jwt.sign(
         { userId: user.userId, name: user.name },
         JWT_SECRET,
         { expiresIn: '1h' }
       );
-      res.cookie('jwtToken', token, { httpOnly: true, maxAge: 3600000 });
+
+      if (user.cookieConsent === 'accepted') {
+        res.cookie('jwtToken', token, { httpOnly: true, maxAge: 3600000 });
+      } else {
+        res.clearCookie('jwtToken');
+      }
+
       res.json({ success: true, user: req.session.user });
     } else {
       res.status(401).json({ success: false, message: "Invalid Password" });
@@ -125,7 +143,39 @@ app.post('/api/user/login', async (req, res) => {
     res.status(500).json({ success: false, message: "Server Error" });
   }
 });
+app.get('/api/user/get-cookie-preference', async (req, res) => {
+    try {
+        if (!req.session || !req.session.isLoggedIn) {
+            return res.json({ preference: 'undecided' });
+        }
 
+        const user = await User.findOne({ userId: req.session.user.userId });
+        
+        if (!user) {
+            return res.json({ preference: 'undecided' });
+        }
+
+        res.json({ preference: user.cookieConsent || 'undecided' });
+    } catch (error) {
+        console.error("Error fetching cookie preference:", error);
+        res.status(500).json({ preference: 'undecided' });
+    }
+});
+app.post('/api/user/update-cookie-preference', async (req, res) => {
+    try {
+        if (!req.session.isLoggedIn) return res.status(401).json({ success: false });
+
+        const { choice } = req.body; 
+        const user = await User.findOne({ userId: req.session.user.userId });
+        
+        user.cookieConsent = choice;
+        await user.save();
+        req.session.user.cookieConsent = choice;
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ success: false });
+    }
+});
 app.get('/newdashboard', checkAuth, async (req, res) => {
   const projectData = await getProjectData(req);
   res.cookie('last_visit', new Date().toLocaleTimeString(), { maxAge: 900000, httpOnly: true });
