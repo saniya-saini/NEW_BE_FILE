@@ -170,7 +170,16 @@
       </div>
     </div>
   </div>
-
+<div id="cookie-consent" class="cookie-modal">
+    <div class="cookie-content">
+        <h3>🍪 Cookie Consent</h3>
+        <p>We use cookies to improve your experience on TrackBus. Do you accept our use of cookies?</p>
+        <div class="cookie-buttons">
+            <button id="accept-cookies" class="btn-accept">Accept</button>
+            <button id="reject-cookies" class="btn-reject">Reject</button>
+        </div>
+    </div>
+</div>
   <script src="/socket.io/socket.io.js"></script>
 
   <script src="/js/newdashboard.js"></script>
@@ -187,6 +196,56 @@
         console.error("Sidebar or MainContent elements not found in HTML");
       }
     }
+  
+document.addEventListener("DOMContentLoaded", async function () {
+    // 1. Sabse pehle elements ko define karein (YAHI MISSING THA)
+    const cookieBox = document.getElementById("cookie-consent");
+    const acceptBtn = document.getElementById("accept-cookies");
+    const rejectBtn = document.getElementById("reject-cookies");
+
+    // 2. Phir Database se preference mangwayein
+    try {
+        const response = await fetch('/api/user/get-cookie-preference');
+        const data = await response.json();
+
+        if (data.preference === 'undecided' || !data.preference) {
+            if (cookieBox) cookieBox.style.display = "block";
+        } else {
+            if (cookieBox) cookieBox.style.display = "none";
+        }
+    } catch (err) {
+        console.error("Preference check failed", err);
+    }
+
+    // 3. Update karne wala function
+    async function updatePreference(choice) {
+        try {
+            await fetch('/api/user/update-cookie-preference', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ choice })
+            });
+
+            if (choice === 'rejected') {
+                document.cookie = "jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            }
+
+            localStorage.setItem("cookieConsent", choice);
+            if (cookieBox) cookieBox.style.display = "none";
+            window.location.reload(); 
+        } catch (err) {
+            console.error("Update failed", err);
+        }
+    }
+
+    // 4. Buttons par click event lagayein (Ab error nahi aayega)
+    if (acceptBtn) {
+        acceptBtn.onclick = () => updatePreference('accepted');
+    }
+    if (rejectBtn) {
+        rejectBtn.onclick = () => updatePreference('rejected');
+    }
+});
   </script>
 </body>
 
