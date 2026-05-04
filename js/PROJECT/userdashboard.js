@@ -549,20 +549,6 @@ window.addEventListener('DOMContentLoaded', function () {
             console.error('Make sure your server is running at:', API_URL);
         });
 
-    if (typeof google === 'undefined') {
-        console.log('📦 Loading Google Maps API...');
-        const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&callback=initMap&libraries=geometry;`
-        script.async = true;
-        script.defer = true;
-        script.onerror = () => {
-            console.error('❌ Failed to load Google Maps API');
-            alert('Failed to load Google Maps. Please check your internet connection and API key.');
-        };
-        document.head.appendChild(script);
-    } else {
-        initMap();
-    }
 
     setTimeout(getUserLocation, 1000);
 
@@ -571,9 +557,12 @@ window.addEventListener('DOMContentLoaded', function () {
 
 document.getElementById('trackBtn').addEventListener('click', trackBus);
 
-document.getElementById('stopBtn').addEventListener('click', () => {
-    stopAutoRefresh();
-});
+const stopBtn = document.getElementById('stopBtn');
+if (stopBtn) {
+    stopBtn.addEventListener('click', () => {
+        stopAutoRefresh();
+    });
+}
 
 document.getElementById('busIdInput').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
@@ -581,7 +570,6 @@ document.getElementById('busIdInput').addEventListener('keypress', (e) => {
     }
 });
 
-window.initMap = initMap;
 
 console.log('✅ User Dashboard Script Loaded - Ready to connect to API');
 
@@ -722,3 +710,4 @@ window.addEventListener('DOMContentLoaded', function () {
 
 // Expose for manual usage from HTML: DriverShare.start('BUS_101'), DriverShare.stop()
 window.DriverShare = DriverShare;
+window.initMap = initMap;

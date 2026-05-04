@@ -52,9 +52,8 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static(path.join(__dirname)));
-app.use('/css', express.static(path.join(__dirname, 'css', 'PROJECT')));
-app.use('/js', express.static(path.join(__dirname, 'js', 'PROJECT')));
-
+app.use('/js', express.static(path.join(__dirname, 'js/PROJECT')));
+app.use('/css', express.static(path.join(__dirname, 'css/PROJECT')));
 // ─── AUTH MIDDLEWARE ─────────────────────────────────────────────────────────
 const checkAuth = (req, res, next) => {
   if (req.session && req.session.isLoggedIn) {
@@ -95,6 +94,9 @@ app.get('/busschedule', (req, res) => {
   res.render('busschedule');
 });
 
+app.get('/userdashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'html', 'PROJECT', 'userdashboard.html'));
+});
 // ─── AUTH API ────────────────────────────────────────────────────────────────
 app.post('/api/user/login', async (req, res) => {
   try {
@@ -199,7 +201,19 @@ app.get('/api/busschedules', async (req, res) => {
   const buses = await Bus.find(query);
   res.json(buses);
 });
+app.get('/businfo', async (req, res) => {
+  const busId = req.query.busId;
 
+  const bus = await Bus.findOne({
+    route: { $regex: busId, $options: 'i' }
+  });
+
+  if (!bus) {
+    return res.status(404).json({ error: 'Bus not found' });
+  }
+
+  res.json(bus);
+});
 busRouter.post('/', async (req, res) => {
   try {
     const newBus = new Bus(req.body);
